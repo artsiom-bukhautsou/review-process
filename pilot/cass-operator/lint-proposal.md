@@ -1,6 +1,6 @@
 # Lint proposal — cass-operator
 
-**Goal:** every mechanical rule lives in `.golangci.yml`, and the code complies with it. Nothing the linter can enforce is written in `REVIEW.md` or the shared guidelines. Reviewers, human or automated, only spend time on judgement.
+**Goal:** every mechanical rule lives in `.golangci.yml`, and the code complies with it. Nothing the linter can enforce is written in [`REVIEW.md`](REVIEW.md) or the shared guidelines. Reviewers, human or automated, only spend time on judgement.
 
 ## Quick wins already in the config
 
@@ -21,7 +21,7 @@ The current `.golangci.yml` has a full **`revive` rule set and `govet` settings 
 | `gocritic` | Small curated set (`ifElseChain`, `elseif`, `unlambda`, `assignOp`) | Assorted readability nits |
 | `usestdlibvars` | `http.MethodGet` and similar | Magic strings |
 
-Tighten `nolintlint`, which is already enabled: set `require-specific: true` (it must name the linter) and `require-explanation: true` (it must give a reason). New suppressions also need human approval (shared guidelines §8).
+Tighten `nolintlint`, which is already enabled: set `require-specific: true` (it must name the linter) and `require-explanation: true` (it must give a reason). New suppressions also need human approval ([shared guidelines §8](../../shared/go-operator-guidelines.md#8-change-hygiene)).
 
 Already enabled and worth keeping: `nonamedreturns`, `ginkgolinter` (focus and spec pollution), `nolintlint`, `unparam`, `whitespace`.
 
@@ -36,4 +36,4 @@ Candidate to look into: a check that fails when `make manifests generate` produc
 
 ## Stays judgement (cannot be linted well)
 
-These live in `REVIEW.md` and the shared guidelines: reconcile blocking, transient vs terminal errors, per-reconcile cost, comments that restate code, unnecessary pointers or packages, test meaningfulness, and changed test assertions.
+These live in [`REVIEW.md`](REVIEW.md) and the shared guidelines: reconcile blocking, transient vs terminal errors, per-reconcile cost, comments that restate code, unnecessary pointers or packages, test meaningfulness, and changed test assertions.

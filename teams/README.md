@@ -1,6 +1,6 @@
 # Team profiles
 
-The main plan (`00-plan.md` – `03-templates.md`) is team-neutral. Each team that adopts it writes a short profile here, `teams/<team-name>.md`, covering only what differs for them.
+The main plan ([`00-plan.md`](../00-plan.md) – [`03-templates.md`](../03-templates.md)) is team-neutral. Each team that adopts it writes a short profile here, `teams/<team-name>.md`, covering only what differs for them.
 
 ## Template
 

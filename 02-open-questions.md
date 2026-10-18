@@ -1,7 +1,7 @@
 # Open Questions & Investigation TODO
 
-**Status:** Draft v0.6 — generic questions. Team-specific answers and questions live in `teams/<team>.md`.
-**How to use:** each item has an ID referenced from `01-steps.md`. Fill in **Answer / Decision** as we go; move resolved items to the bottom with a date. Status: `open` · `investigating` · `needs-discussion` · `decided`.
+**Scope:** generic questions. Team-specific answers and questions live in `teams/<team>.md`. \
+**How to use:** each item has an ID referenced from [`01-steps.md`](01-steps.md). Fill in **Answer / Decision** as we go; move resolved items to the bottom with a date. Status: `open` · `investigating` · `needs-discussion` · `decided`.
 
 ---
 
@@ -30,7 +30,7 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | T19 | Does merging base into a PR (no conflicts) dismiss existing approvals with our branch rules? | Decides how costly a branch update is | Test on pilot | open | |
 | T20 | Changelog fragments: `changie` or a small command in our Go toolkit? The fragment format must render the repo's `[KIND] [#N](link) text` lines in the required order | Ends CHANGELOG conflicts | Try `changie` on the pilot | open | |
 | T21 | Flaky-test detection: from CI re-runs (`run_attempt > 1` that later passed on the same SHA), or from test reports (JUnit) across runs? Where does the `flaky-test` issue get created? | Re-runs are the main slowdown | Start with re-run data from `review-metrics --ci` | open | |
-| T22 | Review-state workflow (`00-plan.md` §4.2): which events can trigger it in Actions (check completion, review threads), what needs the scheduled fallback, and how is the round count stored (commit status description or a hidden comment marker)? Each automated reviewer reports as its own check run `ai-review/<name>`, so any vendor or several agents work | Humans know when to start | Prototype on pilot | open | |
+| T22 | Review-state workflow ([`00-plan.md` §4.2](00-plan.md#42-knowing-when-bots-are-done-review-state-labels)): which events can trigger it in Actions (check completion, review threads), what needs the scheduled fallback, and how is the round count stored (commit status description or a hidden comment marker)? Each automated reviewer reports as its own check run `ai-review/<name>`, so any vendor or several agents work | Humans know when to start | Prototype on pilot | open | |
 | T23 | Dependency bot: Renovate, Dependabot or our own scheduled agent? Which one can follow "latest patch", batching, re-scan and fragment generation in all our orgs (OSS and private)? | Removes repetitive CVE work | Try on pilot | open | |
 | T16 | Public repos: how does the automated reviewer handle fork PRs without exposing secrets — label-gated `pull_request_target` reading the diff only, a `workflow_run` follow-up, or maintainer-triggered? | Security of the review pipeline | Prototype on a public pilot | open | |
 
@@ -43,7 +43,7 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | R3 | Graduated ownership: what earns someone "trusted" status for an area (e.g. N authored + N reviewed PRs, no reverts)? Who decides? | Lighter paths without anyone staying an outsider by default | Discuss in retro | needs-discussion | |
 | R4 | What evidence moves Low from 1 human to 0? | Concrete loosening bar | Decide after Phase 6 data | needs-discussion | |
 | R5 | Circuit breaker threshold for tightening tiers? | Safety valve | Discuss | needs-discussion | |
-| R6 | Written quality requirements: what are they, and are they in a form the reviewer and humans can both apply? | Unwritten bars can't be enforced by tools or by new reviewers | Mine past comments + owner interview (`00-plan.md` §5.5) | open | |
+| R6 | Written quality requirements: what are they, and are they in a form the reviewer and humans can both apply? | Unwritten bars can't be enforced by tools or by new reviewers | Mine past comments + owner interview ([`00-plan.md` §5.5](00-plan.md#55-getting-knowledge-out-of-peoples-heads)) | open | |
 | R7 | Do we have compliance/regulatory requirements that mandate human review? | Could rule out zero-human merges | Ask | open | |
 | R8 | Outside contributors (OSS, other teams): which approvals do they always need? | Trust and direction | Discuss | needs-discussion | |
 
@@ -64,7 +64,7 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 
 | ID | Question | Why it matters | How to find out | Status | Answer / Decision |
 |---|---|---|---|---|---|
-| M1 | Which metrics can the GitHub API give us directly? | Baseline and dashboard | Baseline script (`03-templates.md` §8) | open | |
+| M1 | Which metrics can the GitHub API give us directly? | Baseline and dashboard | Baseline script ([`03-templates.md` §8](03-templates.md#8-metrics-tool)) | open | |
 | M2 | Do we use the `Follow-up to: #N` field consistently? Also, can past follow-ups be found retroactively, e.g. from `[BUGFIX]` CHANGELOG entries that name the PR that introduced the bug? | Guardrail accuracy, since we fix forward rather than revert | Check the first month's PRs; backfill the pilot | open | |
 | M3 | Is the `[wrong]/[intentional]/[not-worth-it]` reply prefix low enough friction? | Data quality | Try in pilot | open | |
 | M4 | Pilot thresholds (fixed share, rounds-to-pass, survey)? | Exit criteria | Set after 2 weeks of data | open | |
@@ -102,7 +102,7 @@ _(Generic decisions only. Team-specific decisions go in the team profile.)_
 
 | ID | Date | Decision |
 |---|---|---|
-| — | 2026-10-17 | Team-specific context and practices live in `teams/`; pilot material in `pilot/`; shared stack guidance in `shared/` |
+| — | 2026-10-17 | Team-specific context and practices live in [`teams/`](teams/); pilot material in [`pilot/`](pilot/); shared stack guidance in [`shared/`](shared/) |
 | — | 2026-10-17 | Per-project context file is `AGENTS.md`, vendor-neutral because reviews may be run by models from several vendors (former D1) |
 | — | 2026-10-17 | No explainer library. Explainers are disposable AI aids; durable learning goes into hand-written developer docs |
 | — | 2026-10-17 | Every step is tagged 🟢 Core / 🟡 Later / ⚪ At scale; small teams start with Core only |

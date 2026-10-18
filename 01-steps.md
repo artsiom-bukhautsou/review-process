@@ -1,7 +1,7 @@
 # Step List — Phased Rollout
 
-**Status:** Draft v0.3 — generic. Team-specific choices live in `teams/<team>.md`; pilot-specific material in `pilot/<repo>/`.
-**How to use:** each phase has steps (checkboxes) and **exit criteria**. A phase is done when its exit criteria are met, not when every box is ticked. Steps marked 🔎 depend on an open question in `02-open-questions.md` (ID in brackets).
+**Scope:** generic. Team-specific choices live in `teams/<team>.md`; pilot-specific material in `pilot/<repo>/`. \
+**How to use:** each phase has steps (checkboxes) and **exit criteria**. A phase is done when its exit criteria are met, not when every box is ticked. Steps marked 🔎 depend on an open question in [`02-open-questions.md`](02-open-questions.md) (ID in brackets).
 
 
 **Start small.** Every step is tagged with when it's worth doing:
@@ -10,7 +10,7 @@
 - 🟡 **Later.** Add once the core runs smoothly, usually after month 2–3, or when a metric shows you need it.
 - ⚪ **At scale.** Only for high PR volume, many repos or several teams. Skip until there's evidence you need it.
 
-A small team can run the 🟢 steps alone and stop there. See `00-plan.md` §0.1 for the reasoning.
+A small team can run the 🟢 steps alone and stop there. See [`00-plan.md` §0.1](00-plan.md#01-start-small-what-to-do-first) for the reasoning.
 
 Phases are ordered by dependency, but some run in parallel. We start on **one pilot repo**, then widen. **Phase 1 includes quick wins** for review wait that need no new tooling.
 
@@ -44,10 +44,10 @@ Phase 9  Widen to all repos (ongoing)
 **Goal:** know what we have today, and measure where we start.
 
 - [ ] 0.1 🟢 List all repos: language, size, activity, criticality, who knows it best (be honest — this is the silo map) 🔎 [T1]
-- [ ] 0.1b 🟢 Write the team profile (`teams/README.md`): structure, pain points, constraints
+- [ ] 0.1b 🟢 Write the team profile ([`teams/README.md`](teams/README.md)): structure, pain points, constraints
 - [ ] 0.2 🟡 Tooling inventory per repo: which org it's in, CI, existing branch rules, CODEOWNERS, security and dependency scanning, merge strategy (squash or merge) 🔎 [T1, T4]
 - [ ] 0.3 🟡 Release inventory per repo: how it deploys, flags, how to roll back, how long it takes 🔎 [T6]
-- [ ] 0.4 🟢 Run `tools/review-metrics` for the last 3–6 months (`03-templates.md` §8): 🔎 [M1, M2]
+- [ ] 0.4 🟢 Run `tools/review-metrics` for the last 3–6 months ([`03-templates.md` §8](03-templates.md#8-metrics-tool)): 🔎 [M1, M2]
   - Time to first human review (median, p95)
   - Time from open to merge
   - Approvals and review comments per PR
@@ -72,15 +72,15 @@ Phase 9  Widen to all repos (ongoing)
 **Goal:** basics later layers depend on, plus immediate relief for review wait. Mostly configuration, plus a few small workflows.
 
 Foundations:
-- [ ] 1.1 🟢 PR template in the pilot repo (**Intent / Follow-up to / Manual testing / Risk / How to revert**). It only asks what CI can't show (`03-templates.md` §1)
+- [ ] 1.1 🟢 PR template in the pilot repo (**Intent / Follow-up to / Manual testing / Risk / How to revert**). It only asks what CI can't show ([`03-templates.md` §1](03-templates.md#1-pull-request-template))
 - [ ] 1.2 🟢 Required status checks on the pilot repo's main branch (lint, types, tests, build)
-- [ ] 1.3 🟢 Branch rules: no direct pushes, required checks, 1 approval, **require conversation resolution**, **dismiss stale approvals on new commits**. **Don't** require the branch to be up to date before merging (`00-plan.md` §4.3). If a rule can't be enforced by the platform, enforce it with a workflow check instead 🔎 [T2, T19]
+- [ ] 1.3 🟢 Branch rules: no direct pushes, required checks, 1 approval, **require conversation resolution**, **dismiss stale approvals on new commits**. **Don't** require the branch to be up to date before merging ([`00-plan.md` §4.3](00-plan.md#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates)). If a rule can't be enforced by the platform, enforce it with a workflow check instead 🔎 [T2, T19]
 - [ ] 1.4 🟢 `CODEOWNERS` on pilot repo: sensitive paths and `.github/workflows/**` → their owners; everything else → whole team 🔎 [R1]
 - [ ] 1.5 🟡 Rollback runbook for the pilot repo, tested once 🔎 [T6]
 - [ ] 1.6 🟡 Start `CHANGELOG-review-process.md`
-- [ ] 1.6b 🟢 **Changelog fragments** instead of editing `CHANGELOG.md` directly: one file per PR, assembled at release, with a CI check that the fragment exists (`00-plan.md` §4.3) 🔎 [T20]
+- [ ] 1.6b 🟢 **Changelog fragments** instead of editing `CHANGELOG.md` directly: one file per PR, assembled at release, with a CI check that the fragment exists ([`00-plan.md` §4.3](00-plan.md#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates)) 🔎 [T20]
 - [ ] 1.6c 🟢 **Flaky-test policy:** re-run detection opens a `flaky-test` issue, flaky tests are fixed with priority or quarantined (with human approval), and open flaky issues are reviewed in the monthly check 🔎 [T21]
-- [ ] 1.6d 🟢 **Branch update norm:** update only on conflict or stale CI. Merge base into the branch rather than rebasing once human review has started. Agents follow the same rule (`00-plan.md` §4.3)
+- [ ] 1.6d 🟢 **Branch update norm:** update only on conflict or stale CI. Merge base into the branch rather than rebasing once human review has started. Agents follow the same rule ([`00-plan.md` §4.3](00-plan.md#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates))
 
 Review-wait quick wins:
 - [ ] 1.7 🟢 Create a GitHub team for the devs; enable **auto-assignment** (load balance) so reviews spread across everyone, not just the experts 🔎 [T14]
@@ -88,7 +88,7 @@ Review-wait quick wins:
 - [ ] 1.9 🟢 Soft PR size limit (e.g. ~400 changed lines) with "split or explain" as the escape hatch 🔎 [P3]
 - [ ] 1.10 🟢 Draft-PR norm for direction questions ("should we do this?") 🔎 [P7]
 - [ ] 1.11 🟡 Scheduled workflow that posts PRs waiting longer than the target to the team channel 🔎 [T15]
-- [ ] 1.12 🟢 *(Optional, time-boxed to 1–2 months)* "Reviews before your own PRs" gate: a new PR's reviewers are only requested once the author has no review requests older than one working day (`00-plan.md` §4.1) 🔎 [T18]
+- [ ] 1.12 🟢 *(Optional, time-boxed to 1–2 months)* "Reviews before your own PRs" gate: a new PR's reviewers are only requested once the author has no review requests older than one working day ([`00-plan.md` §4.1](00-plan.md#41-cutting-review-wait)) 🔎 [T18]
 
 **Exit criteria:**
 - Template + rules active on pilot repo for 2 weeks
@@ -103,10 +103,10 @@ Review-wait quick wins:
 
 - [ ] 2.1 🟢 Use `AGENTS.md` (vendor-neutral; decided). Add a one-line pointer file only for tools that require their own name
 - [ ] 2.2 🟢 Pilot repo `AGENTS.md` — **drafted by someone who is not the main owner, reviewed by the owner**. Writing it is itself a learning exercise
-- [ ] 2.3 🟢 Pilot repo `REVIEW.md` — owner corrects a draft extracted from their past review comments (`00-plan.md` §5.5); secondary owner reviews it
+- [ ] 2.3 🟢 Pilot repo `REVIEW.md` — owner corrects a draft extracted from their past review comments ([`00-plan.md` §5.5](00-plan.md#55-getting-knowledge-out-of-peoples-heads)); secondary owner reviews it
 - [ ] 2.4 🟢 Mine past human review comments; move recurring mechanical ones into lint rules, judgement ones into `REVIEW.md`
 - [ ] 2.4b 🟡 If several repos share a stack: extract common rules into `shared/<family>-guidelines.md` and vendor a copy into each repo with the sync tool (no cross-org references) 🔎 [D8]
-- [ ] 2.5 🟡 Add the doc maintenance rules (`00-plan.md` §5.3) to each repo's contributing guide (vendored with the other shared files)
+- [ ] 2.5 🟡 Add the doc maintenance rules ([`00-plan.md` §5.3](00-plan.md#53-how-these-docs-improve-over-time)) to each repo's contributing guide (vendored with the other shared files)
 - [ ] 2.6 🟡 Agree length limits and a quarterly prune slot 🔎 [D2, D3]
 
 **Exit criteria:**
@@ -132,7 +132,7 @@ Review-wait quick wins:
 
 ## Phase 4 — Knowledge sharing and ownership model
 
-**Goal:** knowledge spreads beyond the current experts; more people carry real review load. *Parallel with 2 and 3.* See `00-plan.md` §7.1; the team profile says how it maps onto your team.
+**Goal:** knowledge spreads beyond the current experts; more people carry real review load. *Parallel with 2 and 3.* See [`00-plan.md` §7.1](00-plan.md#71-ownership-model); the team profile says how it maps onto your team.
 
 - [ ] 4.1 🟢 Assign an **area pair** (primary + secondary owner) for each repo/area; encode in CODEOWNERS 🔎 [K4]
 - [ ] 4.2 🟢 Route Low/Medium PRs from the experts to less familiar reviewers; every such review leaves a summary or a question
@@ -153,14 +153,14 @@ Review-wait quick wins:
 **Goal:** an automated reviewer comments on every pilot PR; findings are high-signal and must be answered.
 
 - [ ] 5.1 🟢 Integrate automated review as a GitHub Actions workflow on `pull_request` 🔎 [T3]
-- [ ] 5.1b 🟢 Public repos: decide how fork PRs get reviewed without exposing secrets (`00-plan.md` §8) 🔎 [T16]
+- [ ] 5.1b 🟢 Public repos: decide how fork PRs get reviewed without exposing secrets ([`00-plan.md` §8](00-plan.md#8-open-source-repositories)) 🔎 [T16]
 - [ ] 5.2 🟢 Inline comments tagged **Important / Nit / Pre-existing**
 - [ ] 5.3 🟡 Separate security review pass 🔎 [T4]
 - [ ] 5.4 🟢 Drop style-only findings (lint's job)
 - [ ] 5.5 🟢 Every finding fixed or resolved with a reason; conversation resolution blocks merge (from 1.3)
 - [ ] 5.6 🟢 Resolution category captured (`[wrong]` / `[intentional]` / `[not-worth-it]` prefixes, see templates) 🔎 [M3]
 - [ ] 5.7 🟡 Convergence guardrails: round cap 3, diff-only re-review, no repeats, flag the bug class 🔎 [T3]
-- [ ] 5.8 🟢 **Review-state workflow and labels** (`review/bots` → `review/author` → `review/human`, plus the `review/bots-done` commit status). Human reviewers are requested only at `review/human` (`00-plan.md` §4.2) 🔎 [T14, T22]
+- [ ] 5.8 🟢 **Review-state workflow and labels** (`review/bots` → `review/author` → `review/human`, plus the `review/bots-done` commit status). Human reviewers are requested only at `review/human` ([`00-plan.md` §4.2](00-plan.md#42-knowing-when-bots-are-done-review-state-labels)) 🔎 [T14, T22]
 - [ ] 5.8b 🟢 **Detector** for `needs-human`: changed or removed test assertions, new `//nolint`, sensitive paths 🔎 [T17]
 - [ ] 5.9 🟢 Two weeks non-blocking, then blocking
 - [ ] 5.10 🟢 Weekly `REVIEW.md` tuning during pilot
@@ -194,7 +194,7 @@ Review-wait quick wins:
 
 **Goal:** human approvals scale with risk. **Start strict, loosen with evidence.**
 
-- [ ] 7.1 🟡 Write tiers for the pilot repo (template in `03-templates.md`) 🔎 [R1]
+- [ ] 7.1 🟡 Write tiers for the pilot repo (template in [`03-templates.md`](03-templates.md)) 🔎 [R1]
 - [ ] 7.2 🟢 Always-human paths via CODEOWNERS (sensitive + workflows)
 - [ ] 7.3 🟡 Trusted list **per area**, using graduated ownership from 4.5 🔎 [R3]
 - [ ] 7.4 ⚪ Tier assignment: start with **path rules + labels** in an Action; classifier later if needed 🔎 [R2]
@@ -202,7 +202,7 @@ Review-wait quick wins:
 - [ ] 7.6 🟢 Agent-written PRs: directing person is accountable and counts as a reviewer
 - [ ] 7.7 🟡 Low starts at 1 human; move to 0 only with ≥1 month of supporting data 🔎 [R4]
 - [ ] 7.8 ⚪ Circuit breaker defined 🔎 [R5]
-- [ ] 7.9 🟡 **Dependency/CVE update PRs** by a bot or agent following the rules in `00-plan.md` §4.4: latest patch, re-scan, batch, dependencies only. Low ones need one human for the first month, then auto-merge if follow-up fixes stay at zero 🔎 [T23]
+- [ ] 7.9 🟡 **Dependency/CVE update PRs** by a bot or agent following the rules in [`00-plan.md` §4.4](00-plan.md#44-dependency-and-cve-updates): latest patch, re-scan, batch, dependencies only. Low ones need one human for the first month, then auto-merge if follow-up fixes stay at zero 🔎 [T23]
 
 **Exit criteria:**
 - Tiers enforced on pilot; wait time down for Low/Medium; no guardrail regression for ≥1 month

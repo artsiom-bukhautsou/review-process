@@ -1,14 +1,14 @@
 # Code Review Improvement Plan
 
-**Status:** Draft v0.6 — generic plan (team- and repo-specific material moved to `teams/` and `pilot/`)
-**Source inspiration:** "How the Claude Code team does code review" (claude.dev blog, Oct 2026)
+**Scope:** generic and team-neutral. Team- and repo-specific material lives in [`teams/`](teams/) and [`pilot/`](pilot/). \
+**Source inspiration:** "How the Claude Code team does code review" (claude.dev blog, Oct 2026) \
 **Companion files:**
-- `01-steps.md` — phased step list with exit criteria
-- `02-open-questions.md` — TODO list of things to investigate and decide
-- `03-templates.md` — starter templates we can create right away
-- `teams/` — team profiles (structure, pain points, team-specific practices)
-- `pilot/` — per-repo pilot material
-- `shared/` — guidance shared by a family of repos
+- [`01-steps.md`](01-steps.md) — phased step list with exit criteria
+- [`02-open-questions.md`](02-open-questions.md) — TODO list of things to investigate and decide
+- [`03-templates.md`](03-templates.md) — starter templates we can create right away
+- [`teams/`](teams/) — team profiles (structure, pain points, team-specific practices)
+- [`pilot/`](pilot/) — per-repo pilot material
+- [`shared/`](shared/) — guidance shared by a family of repos
 
 > Scope note: this plan deliberately ignores model selection, vendor choice and paid services for now. The goal of this round is to describe the **process and the artifacts we can create ourselves**, so we can see where the gaps in our tooling are.
 
@@ -20,13 +20,13 @@ This document is **team-neutral**: it describes the process, the layers and the 
 
 | File | Contains | Reuse by another team |
 |---|---|---|
-| `00-plan.md` … `03-templates.md` | Generic process, steps, open questions, templates | Use as-is |
-| `teams/<team>.md` | Team context, pain points, team structure, how review load and ownership are split in *that* team, team-specific decisions | Write your own from `teams/README.md` |
+| `00-plan.md` … [`03-templates.md`](03-templates.md) | Generic process, steps, open questions, templates | Use as-is |
+| `teams/<team>.md` | Team context, pain points, team structure, how review load and ownership are split in *that* team, team-specific decisions | Write your own from [`teams/README.md`](teams/README.md) |
 | `pilot/<repo>/` | Baseline data and drafts of `AGENTS.md`, `REVIEW.md` and lint changes for a pilot repo | Use as a worked example |
-| `shared/` | Guidance that applies to a family of repos (e.g. all Go controller-runtime operators) | Use if your repos share the stack |
-| `tools/review-metrics/` | Go CLI that produces the baseline and the ongoing metrics | Use as-is |
+| [`shared/`](shared/) | Guidance that applies to a family of repos (e.g. all Go controller-runtime operators) | Use if your repos share the stack |
+| [`tools/review-metrics/`](tools/review-metrics/) | Go CLI that produces the baseline and the ongoing metrics | Use as-is |
 
-**Tool assumptions.** GitHub is treated as just a tool. The plan uses common features (branch rules, CODEOWNERS, labels, checks, Actions). If a feature is missing somewhere, that check moves into our own automation or becomes a review criterion. The plan doesn't depend on any particular product tier. Repos may also be spread over **several orgs** with a mix of OSS and private, so the plan assumes **nothing is shared across orgs** except ticket references. Shared material is copied into each repo (§5.4).
+**Tool assumptions.** GitHub is treated as just a tool. The plan uses common features (branch rules, CODEOWNERS, labels, checks, Actions). If a feature is missing somewhere, that check moves into our own automation or becomes a review criterion. The plan doesn't depend on any particular product tier. Repos may also be spread over **several orgs** with a mix of OSS and private, so the plan assumes **nothing is shared across orgs** except ticket references. Shared material is copied into each repo ([§5.4](#54-shared-guidance-across-a-family-of-repos)).
 
 Two problems show up in most teams and the plan is built around them: **review wait** (too few people able or available to review) and **knowledge silos** (understanding concentrated in a few people). They usually share a cause: the same few people are both the review bottleneck and the knowledge holders. So the plan does two things together:
 
@@ -37,12 +37,12 @@ Two problems show up in most teams and the plan is built around them: **review w
 
 ### 0.1 Start small: what to do first
 
-The full plan is written for any scale. Most of it is **not** needed on day one, and a small team should not try to run all of it. The step list (`01-steps.md`) tags every step:
+The full plan is written for any scale. Most of it is **not** needed on day one, and a small team should not try to run all of it. The step list ([`01-steps.md`](01-steps.md)) tags every step:
 
 | Tier | What's in it | When |
 |---|---|---|
 | 🟢 **Core** | PR template with Follow-up to / Manual testing / Risk / How to revert • CHANGELOG fragments (no more conflicts) • flaky-test hunting • required CI, conversation resolution, stale-approval dismissal • CODEOWNERS for sensitive paths • team auto-assignment, one daily review slot per person, response target • `AGENTS.md` and `REVIEW.md` for the pilot repo • fix the linter config and the code • local verification and review before the PR • automated review on every PR, every finding resolved with a reason (`[wrong]` / `[intentional]` / `[not-worth-it]`) • changed test assertions and new `//nolint` need a human • review-state labels so humans know when bots are done • area pairs and "explain it back" • a 30-minute monthly check inside the existing retro | Weeks 1–6 |
-| 🟡 **Later** | Written risk tiers and graduated ownership • automated dependency/CVE update PRs, auto-merged when the rules in §4.4 hold • security review pass • convergence guardrails (only if review rounds keep growing) • small eval set from past bugs • metrics report and knowledge-spread report • waiting-PR nudge • rollback runbook • shared guidelines across repos • rolling out to more repos | Month 2–3 onwards, or when a metric says so |
+| 🟡 **Later** | Written risk tiers and graduated ownership • automated dependency/CVE update PRs, auto-merged when the rules in [§4.4](#44-dependency-and-cve-updates) hold • security review pass • convergence guardrails (only if review rounds keep growing) • small eval set from past bugs • metrics report and knowledge-spread report • waiting-PR nudge • rollback runbook • shared guidelines across repos • rolling out to more repos | Month 2–3 onwards, or when a metric says so |
 | ⚪ **At scale** | Merge queue • classifier-based risk tiers • zero-human merges • known-clean PR set and scored eval runs on every reviewer change • nightly review of the whole codebase • automatic circuit breakers • feature flags and staged release channels added just for review purposes | High PR volume, many repos or several teams |
 
 **Rule of thumb:** add a 🟡 or ⚪ piece only when the monthly check shows the problem it solves. For example, a merge queue solves "two PRs passed separately and broke main together". At a few merged PRs a month, that problem barely exists.
@@ -86,15 +86,15 @@ We optimise for **human time and attention**, without increasing breakage.
 | Review rounds to pass | Primary | Watch for non-converging loops |
 | Follow-up fix rate (% of merged PRs that fix something an earlier PR introduced) | **Guardrail** | Must not rise. Many teams fix forward instead of reverting, so this replaces a plain revert rate. It comes from the PR template's `Follow-up to: #N` field. Reverts, if any, count too |
 | Incident rate / incidents traced to a merged change | **Guardrail** | Must not rise |
-| Automated finding outcomes (fixed / wrong / intentional / not worth it) | Quality of the reviewer | See §6 Feedback loops |
+| Automated finding outcomes (fixed / wrong / intentional / not worth it) | Quality of the reviewer | See [§6](#6-feedback-loops) Feedback loops |
 | Distribution of human reviews across people | Load balance | Should spread out; no single person doing most reviews |
 | Knowledge spread per repo/area (people who authored or reviewed there in the last 3 months) | Silo signal | Target set per team, e.g. ≥2–3 people per area |
 | Distribution of authorship across people | Silo signal | One person authoring most changes in a repo is a silo even if reviews are spread |
-| Branch updates per PR (merges from base and rebases) | Friction | Each update can dismiss approvals and restart CI. Track it, and fix the causes, such as CHANGELOG conflicts (§4.3) |
-| CI re-run rate (share of PRs where a workflow had to be re-run) | Friction | The main flaky-test signal. Flaky tests stall every PR, so fixing them is a standing priority (§4.3) |
-| Time from "bots done" to first human review | Primary | Measures the human part of the wait separately from the automated part (§4.2) |
+| Branch updates per PR (merges from base and rebases) | Friction | Each update can dismiss approvals and restart CI. Track it, and fix the causes, such as CHANGELOG conflicts ([§4.3](#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates)) |
+| CI re-run rate (share of PRs where a workflow had to be re-run) | Friction | The main flaky-test signal. Flaky tests stall every PR, so fixing them is a standing priority ([§4.3](#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates)) |
+| Time from "bots done" to first human review | Primary | Measures the human part of the wait separately from the automated part ([§4.2](#42-knowing-when-bots-are-done-review-state-labels)) |
 
-**First step is a baseline.** We can't claim improvement without knowing today's numbers. See Phase 0 in `01-steps.md`. All of these come from `tools/review-metrics`.
+**First step is a baseline.** We can't claim improvement without knowing today's numbers. See Phase 0 in [`01-steps.md`](01-steps.md). All of these come from `tools/review-metrics`.
 
 ---
 
@@ -121,7 +121,7 @@ For each layer: what it does, what we'd need to create, and the main unknown.
 | 3 | **Automated code review** | Reviews diff against the whole repo and the PR's stated intent; findings are verified, deduplicated, ranked; style-only noise dropped | Reviewer integration in CI; per-repo `REVIEW.md`; finding categories (Important / Nit / Pre-existing); "every finding must be resolved" rule | Which reviewer tooling fits our platform? |
 | 4 | **Automated security review** | Separate pass focused on security; open findings block merge | Security review step in CI; resolution rule | Existing SAST/dependency scanning overlap |
 | 5 | **Risk-scaled human approval** | Change (not author) sets the risk tier → 0, 1 or 2 human approvals. Sensitive paths always need a human | Written risk tiers; CODEOWNERS for sensitive paths; trusted-author list; approval dismissed on new commits; bot approval never counts as human | Can our platform enforce tiered approvals? How do we classify risk? |
-| 6 | **Merge queue** (⚪ at scale) | Re-runs checks against latest main with the change applied | Merge queue config | Only needed at high churn. Without one, see §4.3 |
+| 6 | **Merge queue** (⚪ at scale) | Re-runs checks against latest main with the change applied | Merge queue config | Only needed at high churn. Without one, see [§4.3](#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates) |
 | 7 | **Release & rollback** | Feature flags, internal use first, staged release, quick revert, on-call watching | Flag system; staged release channels; one-step rollback runbook; incident review that asks "which layer should have caught this?" | Current deploy/rollback maturity per product |
 
 **Important ordering principle:** layers 6–7 (cheap undo) are what *make it safe* to lighten layer 5. We should not reduce human approvals for a repo until its rollback story is solid.
@@ -153,7 +153,7 @@ The layers above reduce how much human review a PR needs. These practices reduce
 | Practice | How on GitHub | Effect |
 |---|---|---|
 | **Route by risk, not by who knows the code** | CODEOWNERS sends sensitive paths to their owners. Everything else goes to a team with auto-assignment (round robin or load balance) across everyone | The few experts stop being the default reviewer |
-| **Automated review runs first** | The reviewer workflow runs on open. Human review is requested only when the PR reaches `review/human` (§4.2) | Humans never spend time on routine issues or on code that's about to change |
+| **Automated review runs first** | The reviewer workflow runs on open. Human review is requested only when the PR reaches `review/human` ([§4.2](#42-knowing-when-bots-are-done-review-state-labels)) | Humans never spend time on routine issues or on code that's about to change |
 | **Review response target** | Team agreement, e.g. first human response within one working day. Tracked, not punished | Turns "waiting" into a visible number |
 | **One daily review slot** | Each person picks one fixed time in **their own working day** to clear their review queue. It doesn't need to be shared, which matters when a team spans timezones | Predictable wait without forcing everyone onto the same schedule |
 | **Reviews before your own PRs** *(optional, for bootstrapping)* | Before your own new PR enters the review queue, finish the reviews assigned to you that are older than one working day. Tooling enforces it softly (see below) | Builds the habit that reviewing is part of the job, not a favour |
@@ -195,8 +195,8 @@ Humans should only be pulled in when the automated part has finished: CI is done
 |---|---|---|
 | `needs-human` | Detector workflow (T17), or any maintainer | A human approval is required whatever the risk tier. Triggers: changed or removed test assertions, new `//nolint`, sensitive paths, a major dependency bump, the round cap being reached |
 | `round-cap` | State workflow | 3 automated review/fix rounds have passed. Moves straight to `review/human` and adds `needs-human`, so a person looks at the *approach* instead of another round |
-| `waiting-on-author-reviews` / `skip-review-gate` | Review gate (§4.1) | Holds back requesting reviewers |
-| `deps` | Dependency bot | Applies the dependency rules in §4.4 |
+| `waiting-on-author-reviews` / `skip-review-gate` | Review gate ([§4.1](#41-cutting-review-wait)) | Holds back requesting reviewers |
+| `deps` | Dependency bot | Applies the dependency rules in [§4.4](#44-dependency-and-cve-updates) |
 
 **Transitions.** The state workflow re-evaluates on: PR opened, ready for review or synchronized; any check run completed; bot reviews and comments posted; and a 15-minute schedule as a fallback, for events Actions can't trigger on.
 
@@ -218,7 +218,7 @@ any bot-triggered return to review/bots counts one round; at 3 ──► round-c
 **Rules that keep it honest:**
 - Agents only pick up PRs labelled `review/bots` or `review/author`. They never push to a PR labelled `review/human` unless a human asks them to.
 - A push after human review has started sends the PR back to `review/bots`, but the human reviewers stay requested. The bots re-review only the new diff.
-- On public repos the state workflow needs write access to labels and statuses. Use `pull_request_target` or `workflow_run` **without checking out PR code**, as in §8.
+- On public repos the state workflow needs write access to labels and statuses. Use `pull_request_target` or `workflow_run` **without checking out PR code**, as in [§8](#8-open-source-repositories).
 - Reading whether a review thread is resolved needs GraphQL (`reviewThreads.isResolved`). REST doesn't expose it.
 
 ### 4.3 CI friction: flaky tests, CHANGELOG conflicts and branch updates
@@ -227,7 +227,7 @@ These don't look like review problems, but each one makes PRs wait.
 
 **Flaky tests.** Required CI only works as a gate if a red result means something. Flaky tests train people to hit "re-run" and ignore failures, and every flaky failure costs one more round of waiting.
 - A test that fails and then passes on the same commit is flaky. The tooling opens or updates an issue labelled `flaky-test` with the failing test and run links. Use the CI re-run rate as the metric.
-- Flaky tests are fixed with priority, before new feature work in that area. If a fix takes longer, the test is quarantined: it is skipped with a link to the issue. Quarantining is a test change, so it needs human approval (§4).
+- Flaky tests are fixed with priority, before new feature work in that area. If a fix takes longer, the test is quarantined: it is skipped with a link to the issue. Quarantining is a test change, so it needs human approval ([§4](#4-where-humans-stay-in-the-loop)).
 - The monthly check reviews the open `flaky-test` issues.
 
 **CHANGELOG conflicts.** A single `CHANGELOG.md` that every PR edits in the same place conflicts constantly, and every conflict means an update of the branch, new CI and a dismissed approval. Fix it at the source with **changelog fragments**:
@@ -236,7 +236,7 @@ These don't look like review problems, but each one makes PRs wait.
 - CI checks that a fragment exists, unless the PR is docs-only or labelled `skip-changelog`. Dependency bots can write their own fragment.
 - `.gitattributes merge=union` is *not* a fix: GitHub's conflict detection and merge button ignore custom merge drivers.
 
-**Branch updates (merging base into the PR, or rebasing).** Track them per PR (§2). Without a merge queue:
+**Branch updates (merging base into the PR, or rebasing).** Track them per PR ([§2](#2-goals-and-how-well-measure-them)). Without a merge queue:
 - **Don't require "branch up to date before merging".** At low churn it forces an update for every merged PR and buys little. PR CI already tests the merge result as of the last push, and post-merge CI on the main branch catches the rare semantic conflict, which is then fixed forward.
 - **Update only when needed:** a real conflict, or CI results that are older than the agreed limit (e.g. a week).
 - **Merge vs rebase, for both humans and agents.** With squash merging, prefer **merging base into the PR branch**. It keeps review threads anchored, keeps "changes since your last review" working, and needs no force-push. Rebase plus force-push is fine only *before* human review has started, i.e. while the PR is in `review/bots` or `review/author`. After `review/human`, agents never rewrite history.
@@ -362,7 +362,7 @@ Agent author + agent reviewer can ping-pong indefinitely. Guardrails:
 - Incident reviews always ask: **which layer should have caught this?**
 
 ### Loop D — Process retrospective (monthly → quarterly)
-- Review metrics dashboard (§2). Is human time going down? Are follow-up fixes and incidents flat or down?
+- Review metrics dashboard ([§2](#2-goals-and-how-well-measure-them)). Is human time going down? Are follow-up fixes and incidents flat or down?
 - Short survey/discussion: what's working, what's annoying, what's being worked around?
 - Decide: loosen (move a path to a lighter tier) or tighten (add a check, raise a tier) — **with evidence**.
 - Record decisions in a changelog (`CHANGELOG-review-process.md`) so we can trace why things are the way they are.
@@ -383,10 +383,10 @@ If machines do most of the line-by-line reading, people lose a natural way to le
 | **Review to learn** | People less familiar with an area review changes there; their job is to understand the change and ask questions — the automated layers already did the bug hunt | Review becomes a learning channel and spreads load |
 | **Coaching, not gatekeeping** | Experienced reviewers comment on approach and design; anything mechanical goes into lint or `REVIEW.md` instead of being repeated | Expert time spent where it teaches |
 | **Graduated ownership** | Someone becomes "trusted" for an area after an agreed number of authored and reviewed PRs there without follow-up fixes — agreed in a retro, logged in the changelog | Clear, evidence-based path; nobody stays an outsider by default |
-| **Explain it back before your first change** | Before working in a new area, read up on it (developer docs, code, a generated explainer, see §7.2) and then explain it back to an owner in 15 minutes, in your own words | The explaining back is where the learning happens and where gaps show up |
+| **Explain it back before your first change** | Before working in a new area, read up on it (developer docs, code, a generated explainer, see [§7.2](#72-general-practices)) and then explain it back to an owner in 15 minutes, in your own words | The explaining back is where the learning happens and where gaps show up |
 | **Pairing on High-risk work** | High-risk changes are done or reviewed in pairs mixing an owner and a non-owner | Critical paths are where silos hurt most |
 
-How these map onto a specific team (e.g. seniors and juniors, or a lead and the rest) is described in that team's profile under `teams/`.
+How these map onto a specific team (e.g. seniors and juniors, or a lead and the rest) is described in that team's profile under [`teams/`](teams/).
 
 ### 7.2 General practices
 
@@ -415,7 +415,7 @@ They are related but not the same thing:
 
 So we don't keep an "explainer library". An explainer is a personal learning aid. **The learning is made durable in two hand-done steps**: explaining the area back to an owner, then writing or updating the developer doc for whatever the docs were missing. Over time the developer docs fill in exactly where people needed them, written by the people who just learned it.
 
-Open question: how much of this is formal process vs. habit? (See `02-open-questions.md`, section K.)
+Open question: how much of this is formal process vs. habit? (See [`02-open-questions.md`](02-open-questions.md), section K.)
 
 ---
 
@@ -431,7 +431,7 @@ Public repos with outside contributors change a few things:
 | **Public review comments** | Automated findings are visible to everyone. Keep `REVIEW.md` tone factual; a noisy reviewer is a worse look in public. |
 | **Docs as onboarding** | `AGENTS.md` / `REVIEW.md` double as contributor documentation — outside contributors (and their own AI tools) read them too. |
 | **Existing obligations** | CLA checks, linked-issue checks and changelog-fragment checks stay as required checks. |
-| **Labels and statuses on fork PRs** | The review-state workflow (§4.2) and the detector (T17) need write access. Run them via `pull_request_target`/`workflow_run`, reading the diff through the API, never checking out or executing PR code |
+| **Labels and statuses on fork PRs** | The review-state workflow ([§4.2](#42-knowing-when-bots-are-done-review-state-labels)) and the detector (T17) need write access. Run them via `pull_request_target`/`workflow_run`, reading the diff through the API, never checking out or executing PR code |
 
 ---
 
@@ -439,7 +439,7 @@ Public repos with outside contributors change a few things:
 
 - Model selection, vendor comparison, paid service tiers.
 - Review "depth" settings tied to a specific product.
-- Fully automatic (zero-human) merges — we may get there for some low-risk categories, but only after the guardrails in §3 layers 6–7 and §6 loops are proven.
+- Fully automatic (zero-human) merges — we may get there for some low-risk categories, but only after the guardrails in [§3](#3-the-layered-model) layers 6–7 and [§6](#6-feedback-loops) loops are proven.
 
 ---
 
@@ -452,8 +452,8 @@ Public repos with outside contributors change a few things:
 | Review loops never converge | Rounds-to-pass rising | Loop B guardrails |
 | Silent quality drop | Follow-up fixes or incidents rising | Guardrail metrics; tighten tiers |
 | Docs rot | Stale-line flags ignored; docs not touched in months | Quarterly prune; owner accountability |
-| Knowledge silos | Bus-factor report shows single-owner paths | §7 practices |
+| Knowledge silos | Bus-factor report shows single-owner paths | [§7](#7-knowledge-sharing--avoiding-human-silos) practices |
 | Secrets exposed to untrusted fork code | Review workflow uses `pull_request_target` and checks out PR head | Never execute PR code in privileged jobs; label-gate or use `workflow_run` |
-| Process overhead on small teams/repos | Complaints, workarounds | Run only the 🟢 Core tier (§0.1) until a metric justifies more |
+| Process overhead on small teams/repos | Complaints, workarounds | Run only the 🟢 Core tier ([§0.1](#01-start-small-what-to-do-first)) until a metric justifies more |
 | Less familiar reviewers rubber-stamp experts' PRs | Approvals with no questions or comments over many PRs | Every review leaves at least a question or a summary; owners spot-check |
 | Experts still pulled into everything | Review share of a few people not dropping | Check CODEOWNERS routing; move more paths to secondary owners |

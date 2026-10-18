@@ -1,12 +1,12 @@
 # Starter Templates
 
-**Status:** Draft v0.6 — adapt per repo. These are things we can create today, without new tooling.
+**How to use:** adapt per repo. These are things we can create today, without new tooling.
 
 ---
 
 ## 1. Pull request template
 
-Save as `.github/pull_request_template.md` **in each repo**. Our repos are spread over several orgs, so there's no shared default. The copy is kept in sync from the source-of-truth repo (see `00-plan.md` §5.4).
+Save as `.github/pull_request_template.md` **in each repo**. Our repos are spread over several orgs, so there's no shared default. The copy is kept in sync from the source-of-truth repo (see [`00-plan.md` §5.4](00-plan.md#54-shared-guidance-across-a-family-of-repos)).
 
 The template only asks for what GitHub can't show. Automated test results, which test files changed, and whether CI passed are all visible on the PR, and failing CI blocks the merge anyway, so none of that is repeated in the description.
 
@@ -207,7 +207,7 @@ Eval case added: [ ] yes  (link)
 
 ## 8. Metrics tool
 
-`tools/review-metrics/` is a Go CLI built on the libraries `gh` uses: go-gh for auth and API, cobra, and lipgloss. It produces the Phase 0 baseline and the ongoing numbers:
+[`tools/review-metrics/`](tools/review-metrics/) is a Go CLI built on the libraries `gh` uses: go-gh for auth and API, cobra, and lipgloss. It produces the Phase 0 baseline and the ongoing numbers:
 - Review timing: time to first human review, open to merge, reviews and approvals per PR
 - Distribution: review and authorship distribution, an optional `--group`, and first-review wait per author
 - Size and knowledge spread: PR size, and knowledge spread per area
@@ -297,7 +297,7 @@ jobs:
 
 ## 11. "Reviews before your own PRs" gate (GitHub Action, sketch)
 
-This is a soft gate for the bootstrapping period (`00-plan.md` §4.1). It never fails a check. It only holds back requesting reviewers until the author's own review queue is clear. It is a sketch to prototype (T18), not production-ready.
+This is a soft gate for the bootstrapping period ([`00-plan.md` §4.1](00-plan.md#41-cutting-review-wait)). It never fails a check. It only holds back requesting reviewers until the author's own review queue is clear. It is a sketch to prototype (T18), not production-ready.
 
 ```yaml
 # .github/workflows/review-gate.yml
@@ -362,7 +362,7 @@ jobs:
 ```
 
 To work, this needs:
-- Team auto-assignment turned **off** for the repo, because reviewers are requested by automation. Once the review-state workflow (`00-plan.md` §4.2) exists, this gate becomes one more condition for `review/human` rather than a separate workflow. CODEOWNERS for sensitive paths still request their owners directly.
+- Team auto-assignment turned **off** for the repo, because reviewers are requested by automation. Once the review-state workflow ([`00-plan.md` §4.2](00-plan.md#42-knowing-when-bots-are-done-review-state-labels)) exists, this gate becomes one more condition for `review/human` rather than a separate workflow. CODEOWNERS for sensitive paths still request their owners directly.
 - A token that can request team reviewers. The default `GITHUB_TOKEN` may not be able to; this is part of T18.
 - On public repos: `pull_request` from forks gets a read-only token. Since outside contributors are exempt anyway, the gate only matters for branches pushed to the repo itself.
 
@@ -370,7 +370,7 @@ To work, this needs:
 
 ## 12. Review-state labels and workflow (sketch)
 
-Implements `00-plan.md` §4.2. Treat it as a starting point to prototype (T22), not production code.
+Implements [`00-plan.md` §4.2](00-plan.md#42-knowing-when-bots-are-done-review-state-labels). Treat it as a starting point to prototype (T22), not production code.
 
 ### Label definitions
 
@@ -383,7 +383,7 @@ Create these in each repo. The sync tool can do it, since labels are per repo.
 | `review/human` | `#0e8a16` | Bots done and clean; human review requested |
 | `needs-human` | `#b60205` | Human approval required regardless of risk tier |
 | `round-cap` | `#d93f0b` | 3 automated rounds reached; human reconsiders the approach |
-| `deps` | `#0366d6` | Dependency update; §4.4 rules apply |
+| `deps` | `#0366d6` | Dependency update; [§4.4](00-plan.md#44-dependency-and-cve-updates) rules apply |
 | `flaky-test` | `#e99695` | (issues) A test that failed then passed on the same commit |
 | `skip-changelog` | `#ededed` | Docs-only or otherwise no changelog fragment needed |
 

@@ -41,6 +41,7 @@ source = "layouts"
 target = "layouts"
 
 [params]
+repoURL = "https://github.com/burmanm/review-guidelines"
 description = "A plan for improving code review in a team where more and more code is written by AI agents."
 [params.navbar]
 displayTitle = true
@@ -54,7 +55,7 @@ type = "flexsearch"
 index = "content"
 [params.editURL]
 enable = true
-base = "https://github.com/burmanm/review-guidelines/edit/main"
+base = "https://github.com/burmanm/review-guidelines/edit/main"  # fallback; per-page targets are set below
 [params.displayUpdatedDate]
 enable = true
 [params.footer]
@@ -76,67 +77,85 @@ params = { icon = "github" }
   [cascade.target]
   path = "{/**}"
 
-# Sidebar labels and order live here, so the .md files need no front matter.
-# Each page's heading still comes from the file's own "# ..." line.
+[[cascade]]
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/README.md"
+  [cascade.target]
+  path = "/"
+
+# Sidebar labels, order and "Edit this page" targets live here, so the .md files
+# need no front matter. Each page's heading still comes from the file's own "# ..." line.
 [[cascade]]
   title = "Plan"
   weight = 10
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/00-plan.md"
   [cascade.target]
   path = "/00-plan"
 [[cascade]]
   title = "Steps"
   weight = 20
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/01-steps.md"
   [cascade.target]
   path = "/01-steps"
 [[cascade]]
   title = "Open questions"
   weight = 30
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/02-open-questions.md"
   [cascade.target]
   path = "/02-open-questions"
 [[cascade]]
   title = "Templates"
   weight = 40
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/03-templates.md"
   [cascade.target]
   path = "/03-templates"
 [[cascade]]
   title = "Shared"
   weight = 50
+  editURL = "https://github.com/burmanm/review-guidelines/tree/main/shared"
   [cascade.target]
   path = "/shared"
 [[cascade]]
   title = "Go operator guidelines"
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/shared/go-operator-guidelines.md"
   [cascade.target]
   path = "/shared/go-operator-guidelines"
 [[cascade]]
   title = "Teams"
   weight = 60
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/teams/README.md"
   [cascade.target]
   path = "/teams"
 [[cascade]]
   title = "Our team"
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/teams/our-team.md"
   [cascade.target]
   path = "/teams/our-team"
 [[cascade]]
   title = "Pilot"
   weight = 70
+  editURL = "https://github.com/burmanm/review-guidelines/tree/main/pilot"
   [cascade.target]
   path = "/pilot"
 [[cascade]]
   title = "cass-operator"
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/pilot/cass-operator/README.md"
   [cascade.target]
   path = "/pilot/cass-operator"
 [[cascade]]
   title = "AGENTS.md"
   weight = 1
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/pilot/cass-operator/AGENTS.md"
   [cascade.target]
   path = "/pilot/cass-operator/agents"
 [[cascade]]
   title = "REVIEW.md"
   weight = 2
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/pilot/cass-operator/REVIEW.md"
   [cascade.target]
   path = "/pilot/cass-operator/review"
 [[cascade]]
   title = "lint-proposal.md"
   weight = 3
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/pilot/cass-operator/lint-proposal.md"
   [cascade.target]
   path = "/pilot/cass-operator/lint-proposal"

@@ -5,14 +5,14 @@
 | File | What it is | Next action |
 |---|---|---|
 | `README.md` | Baseline, findings, pilot plan | Review findings |
-| `AGENTS.md` | Draft project context file for the repo | Owner confirms marked lines; a non-owner opens the PR |
-| `REVIEW.md` | Draft review guidance harvested from past review comments | Owner corrects; then commit |
-| `lint-proposal.md` | golangci-lint changes that replace recurring review comments | Agree; enable and fix the codebase in per-linter PRs |
-| `../../shared/go-operator-guidelines.md` | Rules shared by all our Go operators | Owner corrects; decide where it lives (D8) |
+| [`AGENTS.md`](AGENTS.md) | Draft project context file for the repo | Owner confirms marked lines; a non-owner opens the PR |
+| [`REVIEW.md`](REVIEW.md) | Draft review guidance harvested from past review comments | Owner corrects; then commit |
+| [`lint-proposal.md`](lint-proposal.md) | golangci-lint changes that replace recurring review comments | Agree; enable and fix the codebase in per-linter PRs |
+| [`../../shared/go-operator-guidelines.md`](../../shared/go-operator-guidelines.md) | Rules shared by all our Go operators | Owner corrects; decide where it lives (D8) |
 
 ## Why this repo
 
-It is active, central to our work, and its patterns (controller-runtime reconcile loop, webhooks, envtest, Ginkgo e2e on kind) transfer directly to our other operators. It is public, so the pilot also tests the OSS considerations in `00-plan.md` §8.
+It is active, central to our work, and its patterns (controller-runtime reconcile loop, webhooks, envtest, Ginkgo e2e on kind) transfer directly to our other operators. It is public, so the pilot also tests the OSS considerations in [`00-plan.md` §8](../../00-plan.md#8-open-source-repositories).
 
 ## Baseline (merged PRs, Oct 2024 – Oct 2026)
 
@@ -54,9 +54,9 @@ People who authored or reviewed in each area, over the same period:
 ## Findings
 
 1. **Review wait is the dominant cost.** A median of nearly four days to the first human review on the main maintainer's PRs means most of a PR's life is spent waiting. The automated layers plus team auto-assignment target exactly this.
-2. **The silo is authorship, not only review.** Reviews are spread over a few approvers, but 85% of the code comes from one person, so approvers often review code in areas they don't author in. The ownership model (`00-plan.md` §7.1) needs other people *writing* code in `pkg/reconciliation` and `internal/webhooks`, not only reviewing it.
-3. **The quality bar is consistent but unwritten.** About 160 of the main maintainer's top-level review comments fall into a small number of recurring themes: reconcile-loop correctness, Kubernetes semantics, upgrade safety, test meaningfulness, Go idiom and change hygiene. They are now drafted in `REVIEW.md` and the shared guidelines.
-4. **Several recurring comments are lintable.** `revive` and `govet` are already configured but disabled (`lint-proposal.md`).
+2. **The silo is authorship, not only review.** Reviews are spread over a few approvers, but 85% of the code comes from one person, so approvers often review code in areas they don't author in. The ownership model ([`00-plan.md` §7.1](../../00-plan.md#71-ownership-model)) needs other people *writing* code in `pkg/reconciliation` and `internal/webhooks`, not only reviewing it.
+3. **The quality bar is consistent but unwritten.** About 160 of the main maintainer's top-level review comments fall into a small number of recurring themes: reconcile-loop correctness, Kubernetes semantics, upgrade safety, test meaningfulness, Go idiom and change hygiene. They are now drafted in [`REVIEW.md`](REVIEW.md) and the shared guidelines.
+4. **Several recurring comments are lintable.** `revive` and `govet` are already configured but disabled ([`lint-proposal.md`](lint-proposal.md)).
 5. **15% of PRs merged without a second person.** This is fine for genuinely low-risk changes, but today it happens without a written rule. Risk tiers (Phase 7) make it explicit.
 6. **The PR template lacks risk, rollback and follow-up links.** It has a checklist (tests, docs, CHANGELOG, CLA) but no **Risk**, **How to revert** or **Follow-up to** field. Without that field, fix-forward PRs can't be linked to the PR that caused the problem.
 7. **The OSS setup is already partly there.** A linked-issue check, OSV scanner and govulncheck run in CI. CODEOWNERS is a single team, with no path-specific owners.
@@ -70,8 +70,8 @@ People who authored or reviewed in each area, over the same period:
 | 1.6b | Changelog fragments: `CHANGELOG.md` is the main source of conflicts and branch updates here |
 | 1.3 | Enable conversation resolution and stale-approval dismissal on `master` |
 | 1.4 | CODEOWNERS: `.github/workflows/`, `apis/`, `internal/webhooks/` → named owners; the rest → maintainers team |
-| 2.x | Owner corrects `REVIEW.md` and the shared guidelines; a non-owner commits `AGENTS.md` |
-| 2.4 | Enable `revive`, `govet` and the additions, fixing the code in the same PRs (`lint-proposal.md`) |
+| 2.x | Owner corrects [`REVIEW.md`](REVIEW.md) and the shared guidelines; a non-owner commits [`AGENTS.md`](AGENTS.md) |
+| 2.4 | Enable `revive`, `govet` and the additions, fixing the code in the same PRs ([`lint-proposal.md`](lint-proposal.md)) |
 | 4.x | Pick `internal/webhooks` and one part of `pkg/reconciliation` (e.g. decommission) as the first areas where a second person **authors** changes, with the "explain it back" norm; gaps found go into `docs/developer/` (starting with replacing the outdated `kind.md` with `hack/cluster.sh` usage) |
 | 5.1b | Decide fork-PR handling (T16) before the reviewer workflow goes live, since outside contributors open PRs here |
 | 6.2 | Eval set: use past `[BUGFIX]` entries in the CHANGELOG that link to the PR that introduced the bug, plus bugs found in review (the harvested comments show where), confirmed by the main maintainer |

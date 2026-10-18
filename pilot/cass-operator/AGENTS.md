@@ -35,14 +35,14 @@ Run `make test` before opening a PR. CI results appear on the PR, so don't paste
 
 ## Conventions
 
-- Follow `shared/go-operator-guidelines.md` <!-- confirm final location/link -->. It covers the reconcile loop, Kubernetes semantics, API design, Go style, comments and tests.
+- Follow [`shared/go-operator-guidelines.md`](../../shared/go-operator-guidelines.md) <!-- confirm final location/link -->. It covers the reconcile loop, Kubernetes semantics, API design, Go style, comments and tests.
 - **CHANGELOG:** add an entry under `## unreleased` in the order `[CHANGE]`, `[FEATURE]`, `[ENHANCEMENT]`, `[BUGFIX]`. Every entry links its GitHub issue. Docs-only PRs need no entry. <!-- replace with the changelog-fragment instructions once step 1.6b lands -->
 - **Branch updates:** merge `master` into your branch only when there's a conflict. Don't rebase or force-push once human review has started.
 - **Lint suppressions:** avoid `//nolint`. If one is unavoidable, name the linter and give a reason; the PR will need human approval.
 - **Every PR links an issue.** A workflow checks this.
 - **API changes** must stay compatible with existing `CassandraDatacenter` resources and with k8ssandra-operator.
 - **Server differences matter.** `serverType` is `cassandra`, `dse` or `hcd`, and behaviour often depends on version, for example 3.11, 4.x or 5.x. Gate version-specific code explicitly.
-- **Three test levels** (details in the shared guidelines §6):
+- **Three test levels** (details in the [shared guidelines §6](../../shared/go-operator-guidelines.md#6-tests)):
   - **Unit tests** sit next to the code and use testify, with `require` for error checks.
   - **envtest** suites live in the controller and webhook packages (`internal/controllers/*`, `internal/webhooks/*`), use Ginkgo/Gomega, and run against a real API server. Prefer envtest for controller behaviour.
   - **End-to-end** suites live in `tests/`, use Ginkgo/Gomega, and run on kind.
@@ -61,5 +61,5 @@ Run `make test` before opening a PR. CI results appear on the PR, so don't paste
 
 ## Further reading
 
-- Review guidance: `REVIEW.md`
+- Review guidance: [`REVIEW.md`](REVIEW.md)
 - Developer docs: `docs/developer/`

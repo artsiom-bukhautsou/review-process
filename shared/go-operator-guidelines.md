@@ -1,9 +1,9 @@
 # Go operator guidelines (shared)
 
-**Applies to:** all our Go controller-runtime operators. Each repo's `AGENTS.md` links here; each repo's `REVIEW.md` adds what is specific to that repo.
-**Status:** Draft v0.2 — harvested from past cass-operator review comments (2021–2026), corrected by the owner.
+**Applies to:** all our Go controller-runtime operators. Each repo's `AGENTS.md` links here; each repo's `REVIEW.md` adds what is specific to that repo. \
+**Source:** harvested from past cass-operator review comments (2021–2026), corrected by the owner.
 
-**Scope:** judgement rules only. Anything a linter can enforce lives in `.golangci.yml`, and the codebase is fixed to comply with it (see `pilot/cass-operator/lint-proposal.md`). If a rule here becomes lintable, it moves to the linter config and is deleted from this file.
+**Scope:** judgement rules only. Anything a linter can enforce lives in `.golangci.yml`, and the codebase is fixed to comply with it (see [`pilot/cass-operator/lint-proposal.md`](../pilot/cass-operator/lint-proposal.md)). If a rule here becomes lintable, it moves to the linter config and is deleted from this file.
 
 ---
 

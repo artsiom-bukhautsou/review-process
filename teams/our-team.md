@@ -1,6 +1,6 @@
 # Team profile — our team
 
-**Last updated:** 2026-10-17   **Process owner:** TBD
+**Process owner:** TBD
 
 ## Context
 
@@ -11,17 +11,17 @@
 | Tooling language | Go (an existing toolkit of Go CLIs) | Our own tools are Go CLIs using the libraries `gh` uses |
 | Revert culture | Bugs are fixed forward with a new PR, rarely reverted | Guardrail is the follow-up fix rate (`Follow-up to: #N`) |
 | Merge churn | Low; no merge queue. `CHANGELOG.md` conflicts constantly | Changelog fragments; no "branch must be up to date" rule |
-| Repos | Multiple repos, public and private; some work is OSS | OSS section (`00-plan.md` §8) applies to public repos: fork PRs, outside contributors, CLA |
-| Stack | Many Go controller-runtime operators | Shared guidance in `shared/go-operator-guidelines.md`, referenced from each repo |
+| Repos | Multiple repos, public and private; some work is OSS | OSS section ([`00-plan.md` §8](../00-plan.md#8-open-source-repositories)) applies to public repos: fork PRs, outside contributors, CLA |
+| Stack | Many Go controller-runtime operators | Shared guidance in [`shared/go-operator-guidelines.md`](../shared/go-operator-guidelines.md), referenced from each repo |
 | Compliance | None, only quality requirements | Zero-human merges for Low risk are allowed in principle, with evidence |
-| Quality requirements | Mostly unwritten, held by the main maintainer; linting exists but doesn't capture "Effective Go"-type judgement | Harvest rules from past review comments (`00-plan.md` §5.5) |
+| Quality requirements | Mostly unwritten, held by the main maintainer; linting exists but doesn't capture "Effective Go"-type judgement | Harvest rules from past review comments ([`00-plan.md` §5.5](../00-plan.md#55-getting-knowledge-out-of-peoples-heads)) |
 | Pain #1 | **Waiting for reviews** | Primary target |
 | Pain #2 | **Knowledge concentrated in a few people** (not always one) | Secondary target; same root cause as #1 |
-| Pilot repo | `k8ssandra/cass-operator` | See `pilot/cass-operator/` |
+| Pilot repo | `k8ssandra/cass-operator` | See [`pilot/cass-operator/`](../pilot/cass-operator/) |
 
 ## Diagnosis
 
-The senior developers are both the review bottleneck and the knowledge holders. The pilot baseline makes this concrete (see `pilot/cass-operator/README.md`): in the last two years one maintainer authored about 85% of merged PRs and left the largest share of review comments, and the median wait for a first human review on that maintainer's PRs was close to four days. Reviews arrive slowly because few people feel able to review, and few people feel able to review because the knowledge sits with the people writing most of the code.
+The senior developers are both the review bottleneck and the knowledge holders. The pilot baseline makes this concrete (see [`pilot/cass-operator/README.md`](../pilot/cass-operator/README.md)): in the last two years one maintainer authored about 85% of merged PRs and left the largest share of review comments, and the median wait for a first human review on that maintainer's PRs was close to four days. Reviews arrive slowly because few people feel able to review, and few people feel able to review because the knowledge sits with the people writing most of the code.
 
 So the plan for this team has two halves that support each other:
 
@@ -42,7 +42,7 @@ So the plan for this team has two halves that support each other:
 
 ## Team-specific adjustments to the steps
 
-- **Phase 2.2:** a junior drafts the pilot `AGENTS.md` from the draft in `pilot/cass-operator/`; a senior reviews it.
+- **Phase 2.2:** a junior drafts the pilot `AGENTS.md` from the draft in [`pilot/cass-operator/`](../pilot/cass-operator/); a senior reviews it.
 - **Phase 2.3:** the main maintainer corrects the harvested `REVIEW.md` draft; a junior reviews it for clarity ("could I apply this rule?").
 - **Phase 6.2:** juniors dig up eval cases from past reverts and bug fixes; a senior confirms each one.
 - **Phase 6.6:** the monthly review-process check happens inside the existing team retro.

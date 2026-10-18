@@ -1,0 +1,49 @@
+{{- /*
+  Links in the Markdown are written as relative repo paths so they work on GitHub
+  (e.g. ../00-plan.md#41-cutting-review-wait, teams/, pilot/cass-operator/README.md).
+  This hook maps them to the published pages:
+    - foo.md            -> the page for foo.md
+    - dir/ or README.md -> that section's landing page
+    - anything not published (tools/, files outside the site) -> the file on GitHub
+  Everything else (external URLs, #anchors, absolute paths) renders as given.
+  Based on Hextra's render-link.html.
+*/ -}}
+{{- $dest := .Destination -}}
+{{- $url := urls.Parse "" -}}
+{{- $parsed := false -}}
+{{- with try (urls.Parse $dest) -}}
+  {{- if not .Err -}}{{- $url = .Value -}}{{- $parsed = true -}}{{- end -}}
+{{- end -}}
+{{- $fragment := cond (and $parsed $url.Fragment) (printf "#%s" $url.Fragment) "" -}}
+
+{{- if and $parsed $url.Path (not $url.IsAbs) (not (hasPrefix $url.Path "/")) -}}
+  {{- $isDir := hasSuffix $url.Path "/" -}}
+  {{- $isMd := hasSuffix $url.Path ".md" -}}
+  {{- if or $isDir $isMd -}}
+    {{- $repoPath := path.Clean (path.Join .PageInner.File.Dir $url.Path) -}}
+    {{- $repoPath = strings.TrimPrefix "/" $repoPath -}}
+    {{- $lookup := $repoPath -}}
+    {{- if eq (path.Base $repoPath) "README.md" -}}
+      {{- $lookup = path.Dir $repoPath -}}
+    {{- else if $isMd -}}
+      {{- $lookup = strings.TrimSuffix ".md" $repoPath -}}
+    {{- end -}}
+    {{- $lookup = cond (eq $lookup ".") "/" (printf "/%s" $lookup) -}}
+    {{- with site.GetPage $lookup -}}
+      {{- $dest = printf "%s%s" .RelPermalink $fragment -}}
+    {{- else -}}
+      {{- $dest = printf "%s/%s/main/%s%s" site.Params.repoURL (cond $isDir "tree" "blob") $repoPath $fragment -}}
+    {{- end -}}
+  {{- end -}}
+{{- else if and $parsed (hasPrefix $dest "/") -}}
+  {{- $dest = relURL (strings.TrimPrefix "/" $dest) -}}
+{{- end -}}
+
+{{- $isExternal := hasPrefix $dest "http" -}}
+<a href="{{ $dest | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>
+  {{- .Text | safeHTML -}}
+  {{- if and site.Params.externalLinkDecoration $isExternal -}}
+    {{- partial "utils/icon.html" (dict "name" "arrow-up-right" "attributes" `class="hx:inline hx:rtl:rotate-270 hx:align-baseline" height="1em" aria-hidden="true"`) -}}
+  {{- end -}}
+</a>
+{{- /* trim */ -}}
