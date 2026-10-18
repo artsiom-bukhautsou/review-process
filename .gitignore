@@ -1,3 +1,8 @@
 /tools/review-metrics/review-metrics
 *.test
 .DS_Store
+
+# Hugo site
+/site/public/
+/site/resources/
+.hugo_build.lock

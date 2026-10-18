@@ -1,0 +1,142 @@
+# Hugo site for GitHub Pages. The Markdown lives in the repo root, teams/,
+# shared/ and pilot/ exactly as on GitHub; this folder only holds the site config.
+# Preview locally: cd site && hugo server
+baseURL = "https://burmanm.github.io/review-guidelines/"
+title = "Review guidelines"
+enableGitInfo = true
+disableKinds = ["taxonomy", "term"]
+
+[markup.goldmark.renderer]
+unsafe = true
+[markup.highlight]
+noClasses = false
+[markup.tableOfContents]
+startLevel = 2
+endLevel = 3
+
+[module]
+[module.hugoVersion]
+min = "0.146.0"
+extended = true
+[[module.imports]]
+path = "github.com/imfing/hextra"
+
+# Mount the repo's Markdown as content. READMEs become section landing pages;
+# tools/ and anything else not listed is never published.
+[[module.mounts]]
+source = "../README.md"
+target = "content/_index.md"
+[[module.mounts]]
+source = "../teams/README.md"
+target = "content/teams/_index.md"
+[[module.mounts]]
+source = "../pilot/cass-operator/README.md"
+target = "content/pilot/cass-operator/_index.md"
+[[module.mounts]]
+source = ".."
+target = "content"
+files = ["! /README.md", "! **/README.md", "/*.md", "/teams/**.md", "/shared/**.md", "/pilot/**.md"]
+[[module.mounts]]
+source = "layouts"
+target = "layouts"
+
+[params]
+description = "A plan for improving code review in a team where more and more code is written by AI agents."
+[params.navbar]
+displayTitle = true
+displayLogo = false
+[params.page]
+width = "wide"
+[params.search]
+enable = true
+type = "flexsearch"
+[params.search.flexsearch]
+index = "content"
+[params.editURL]
+enable = true
+base = "https://github.com/burmanm/review-guidelines/edit/main"
+[params.displayUpdatedDate]
+enable = true
+[params.footer]
+displayPoweredBy = false
+
+[[menu.main]]
+name = "Search"
+weight = 1
+params = { type = "search" }
+[[menu.main]]
+name = "GitHub"
+weight = 2
+url = "https://github.com/burmanm/review-guidelines"
+params = { icon = "github" }
+
+# Every page uses the docs layout (sidebar + table of contents).
+[[cascade]]
+  type = "docs"
+  [cascade.target]
+  path = "{/**}"
+
+# Sidebar labels and order live here, so the .md files need no front matter.
+# Each page's heading still comes from the file's own "# ..." line.
+[[cascade]]
+  title = "Plan"
+  weight = 10
+  [cascade.target]
+  path = "/00-plan"
+[[cascade]]
+  title = "Steps"
+  weight = 20
+  [cascade.target]
+  path = "/01-steps"
+[[cascade]]
+  title = "Open questions"
+  weight = 30
+  [cascade.target]
+  path = "/02-open-questions"
+[[cascade]]
+  title = "Templates"
+  weight = 40
+  [cascade.target]
+  path = "/03-templates"
+[[cascade]]
+  title = "Shared"
+  weight = 50
+  [cascade.target]
+  path = "/shared"
+[[cascade]]
+  title = "Go operator guidelines"
+  [cascade.target]
+  path = "/shared/go-operator-guidelines"
+[[cascade]]
+  title = "Teams"
+  weight = 60
+  [cascade.target]
+  path = "/teams"
+[[cascade]]
+  title = "Our team"
+  [cascade.target]
+  path = "/teams/our-team"
+[[cascade]]
+  title = "Pilot"
+  weight = 70
+  [cascade.target]
+  path = "/pilot"
+[[cascade]]
+  title = "cass-operator"
+  [cascade.target]
+  path = "/pilot/cass-operator"
+[[cascade]]
+  title = "AGENTS.md"
+  weight = 1
+  [cascade.target]
+  path = "/pilot/cass-operator/agents"
+[[cascade]]
+  title = "REVIEW.md"
+  weight = 2
+  [cascade.target]
+  path = "/pilot/cass-operator/review"
+[[cascade]]
+  title = "lint-proposal.md"
+  weight = 3
+  [cascade.target]
+  path = "/pilot/cass-operator/lint-proposal"
