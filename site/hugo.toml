@@ -1,5 +1,5 @@
-# Hugo site for GitHub Pages. The Markdown lives in the repo root, teams/,
-# shared/ and pilot/ exactly as on GitHub; this folder only holds the site config.
+# Hugo site for GitHub Pages. The Markdown lives in the repo root, shared/
+# and pilot/ exactly as on GitHub; this folder only holds the site config.
 # Preview locally: cd site && hugo server
 baseURL = "https://burmanm.github.io/review-guidelines/"
 title = "Review guidelines"
@@ -22,20 +22,18 @@ extended = true
 path = "github.com/imfing/hextra"
 
 # Mount the repo's Markdown as content. READMEs become section landing pages;
-# tools/ and anything else not listed is never published.
+# tools/, teams/ (not ready to publish yet) and anything else not listed is
+# never published. Links to them go to GitHub instead.
 [[module.mounts]]
 source = "../README.md"
 target = "content/_index.md"
-[[module.mounts]]
-source = "../teams/README.md"
-target = "content/teams/_index.md"
 [[module.mounts]]
 source = "../pilot/cass-operator/README.md"
 target = "content/pilot/cass-operator/_index.md"
 [[module.mounts]]
 source = ".."
 target = "content"
-files = ["! /README.md", "! **/README.md", "/*.md", "/teams/**.md", "/shared/**.md", "/pilot/**.md"]
+files = ["! /README.md", "! **/README.md", "/*.md", "/shared/**.md", "/pilot/**.md"]
 [[module.mounts]]
 source = "layouts"
 target = "layouts"
@@ -119,17 +117,6 @@ params = { icon = "github" }
   editURL = "https://github.com/burmanm/review-guidelines/edit/main/shared/go-operator-guidelines.md"
   [cascade.target]
   path = "/shared/go-operator-guidelines"
-[[cascade]]
-  title = "Teams"
-  weight = 60
-  editURL = "https://github.com/burmanm/review-guidelines/edit/main/teams/README.md"
-  [cascade.target]
-  path = "/teams"
-[[cascade]]
-  title = "Our team"
-  editURL = "https://github.com/burmanm/review-guidelines/edit/main/teams/our-team.md"
-  [cascade.target]
-  path = "/teams/our-team"
 [[cascade]]
   title = "Pilot"
   weight = 70
