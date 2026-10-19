@@ -68,11 +68,13 @@ Three levels. Each catches different problems; none replaces another.
 
 All levels:
 1. **Tests must actually exercise the feature.** Check that fakes, such as a fake API server, expose the capability being tested. A test that passes because the fake lacks the feature proves nothing.
-2. **Cover three cases for new behaviour:** existing behaviour unchanged, new behaviour works, and the failure path.
+2. **Cover three cases for new behaviour:** existing behaviour unchanged, new behaviour works, and the failure path. "Existing behaviour unchanged" is normally shown by the existing tests still passing. Add a case for it only when no existing test covers that path.
 3. **Test at the level that owns the behaviour** (table above).
 4. **Keep test setup simple.** Inline data is often clearer than overriding methods. Use existing builders and helpers.
 5. **Don't change test data unless the test needs it.** Test data doesn't have to mirror production.
 6. **Check that assertions can fail.** For example, `-1 <= 1` passes when the value is an error sentinel.
+7. **No standalone regression tests.** Behaviour is tested in the normal tests of the code, controller or scenario that owns it. A bug fix extends those tests, for example with a new table case or another assertion in the existing spec, so they cover the case they missed. Don't add a separate test named after the bug, the issue or the parameter that changed. If the behaviour matters, it belongs in the normal tests. If it doesn't, it needs no test.
+8. **No new tests when behaviour doesn't change.** A refactor, a rename or an internal restructuring is proven by the existing tests passing. The same goes for the default path of a new optional field that keeps the old behaviour when unset: only the new, set path needs a test. Don't add tests that only pin a constant, a default value or a field the diff touched, or that only check a function was called.
 
 Waiting and polling (envtest and end-to-end):
 1. **Poll, don't sleep.** Use `Eventually` and the existing wait helpers.

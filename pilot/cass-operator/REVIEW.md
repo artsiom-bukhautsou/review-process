@@ -28,6 +28,7 @@ A healthy Cassandra cluster gets disrupted. This includes an unexpected rolling 
 - Image or version references hardcoded in Go instead of `config/imageconfig`.
 - Unrelated changes: reformatting, untouched files in the diff, test data edited without the test needing it.
 - **New `//nolint` directives**: always flag these. The PR needs human approval whatever its risk tier, and the directive must name the linter and give a reason.
+- **Test sprawl** ([shared §6, items 7–8](../../shared/go-operator-guidelines.md#6-tests)): standalone regression tests, or new tests for a change that doesn't alter behaviour. Report it once per PR and list every such test. For each one, say which existing test the case belongs in, or that it can be deleted.
 - **Changed or removed assertions in existing tests**: different expected values, relaxed matchers, deleted checks, skipped tests. Always flag these, and the PR needs human approval whatever its risk tier. The PR description must explain why the expectation changed.
 
 ## Don't flag

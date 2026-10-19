@@ -112,3 +112,4 @@ _(Generic decisions only. Team-specific decisions go in the team profile.)_
 | — | 2026-10-18 | New `//nolint` directives need human approval, the same as changed test assertions |
 | — | 2026-10-18 | GitHub is treated as a tool, with no plan-specific assumptions. Repos span several orgs, so shared files are vendored per repo (former T13 dropped) |
 | — | 2026-10-18 | Metrics tooling is written in Go (`tools/review-metrics`), using the libraries `gh` uses |
+| — | 2026-10-19 | No standalone regression tests. Bug fixes extend the normal tests; changes that don't alter behaviour add no tests. Reviewers flag test sprawl as Important |

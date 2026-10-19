@@ -46,6 +46,7 @@ Run `make test` before opening a PR. CI results appear on the PR, so don't paste
   - **Unit tests** sit next to the code and use testify, with `require` for error checks.
   - **envtest** suites live in the controller and webhook packages (`internal/controllers/*`, `internal/webhooks/*`), use Ginkgo/Gomega, and run against a real API server. Prefer envtest for controller behaviour.
   - **End-to-end** suites live in `tests/`, use Ginkgo/Gomega, and run on kind.
+  - **Extend existing tests rather than adding new ones.** No standalone regression tests. A change that doesn't alter behaviour needs no new test, because the existing tests passing is the proof ([shared guidelines §6](../../shared/go-operator-guidelines.md#6-tests)).
 
 ## Goals
 
