@@ -72,6 +72,12 @@ One paragraph: what the project does and who uses it.
 ## Non-goals
 - <what we deliberately don't do — prevents "helpful" scope creep>
 
+## User documentation
+- User-facing here means: <CRD fields, annotations, flags, behaviour changes, metrics …>
+- Where docs go: <`docs/` path | docs repo | docs team tracker>
+- Format: <full page | docs note in the changelog fragment (`docs:` field)>
+- Picked up by: <docs team contact>
+
 ## Further reading
 - Architecture: `docs/architecture.md`
 - Decisions: `docs/adr/`
@@ -88,6 +94,8 @@ One paragraph: what the project does and who uses it.
 
 Owners: <team or people>
 
+<!-- Judgement only. If a rule here can be checked by a script, write the check and delete the line. -->
+
 ## What failure looks like here
 <!-- One or two lines. e.g. "Config: it misroutes traffic." "Docs: it lies." "Billing: it charges the wrong amount." -->
 
@@ -96,6 +104,7 @@ Owners: <team or people>
 
 ## Don't flag
 - Style issues the linter already enforces
+- Anything a CI check already enforces (changelog fragment, generated files, linked issue)
 - <patterns that look wrong but are intentional, with a short why>
 
 ## Skip these paths

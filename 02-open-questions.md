@@ -33,6 +33,8 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | T22 | Review-state workflow ([`00-plan.md` §4.2](00-plan.md#42-knowing-when-bots-are-done-review-state-labels)): which events can trigger it in Actions (check completion, review threads), what needs the scheduled fallback, and how is the round count stored (commit status description or a hidden comment marker)? Each automated reviewer reports as its own check run `ai-review/<name>`, so any vendor or several agents work | Humans know when to start | Prototype on pilot | open | |
 | T23 | Dependency bot: Renovate, Dependabot or our own scheduled agent? Which one can follow "latest patch", batching, re-scan and fragment generation in all our orgs (OSS and private)? | Removes repetitive CVE work | Try on pilot | open | |
 | T16 | Public repos: how does the automated reviewer handle fork PRs without exposing secrets — label-gated `pull_request_target` reading the diff only, a `workflow_run` follow-up, or maintainer-triggered? | Security of the review pipeline | Prototype on a public pilot | open | |
+| T24 | CI time: which numbers do we track (time to green, queue time, job duration, runner minutes), taken from the Actions API by `review-metrics --ci`? What target, and what rise triggers action? Does any repo need more or larger runners? | Every review round waits for CI; queue time shows when runners run out | Extend `review-metrics --ci` on the pilot | open | |
+| T25 | Coverage map: how do we merge unit, envtest and end-to-end coverage (`go build -cover`, `GOCOVERDIR`, `go tool covdata`) and report it per area? How do we show changed-line coverage on a PR without an external service? | Readiness step 3.9 and reviewer information 3.12 | Prototype on the pilot | open | |
 
 ## R — Risk tiers and approval policy
 
@@ -59,6 +61,7 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | D7 | Shared conventions for all repos: which repo is the source of truth? (Repos span several orgs, so it's copied, not referenced) | Avoid drift between copies | Discuss | open | |
 | D8 | Sync tool: a command in our Go toolkit that copies the shared files (guidelines, PR template, standard workflows) into each listed repo and opens a PR. Run locally or on a schedule from one repo with a token per org? How do copies record their source version? | The reviewer only follows what it can read locally | Prototype with two repos in different orgs | open | |
 | D9 | Which rules are mechanical (→ linter) vs judgement (→ `REVIEW.md`)? Re-check after each harvest | Prefer mechanical enforcement | Per harvest | open | |
+| D10 | User docs, per repo: what counts as user-facing, where docs go (in-repo `docs/`, a separate docs repo, the docs team's tracker), which format (full page or docs note), and who in the docs team picks them up? Does the docs note travel in the changelog fragment? | Every user-facing feature reaches the docs team | Ask the docs team; decide for the pilot | open | |
 
 ## M — Measurement
 
@@ -71,6 +74,7 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | M5 | How many past follow-up fixes or bugs are usable as eval cases? | Eval effort | Search history | open | |
 | M6 | How do we run the eval set — manually or as an Action? | Routine use | Depends on T3 | open | |
 | M7 | Rollback time target per repo? | Phase 8 exit | Per repo | open | |
+| M8 | Which CI re-run rate counts as "ready" (e.g. under 5 % of PR head commits)? | Phase 3 exit | Set from the pilot baseline | open | |
 
 ## P — Process and people
 
@@ -113,3 +117,6 @@ _(Generic decisions only. Team-specific decisions go in the team profile.)_
 | — | 2026-10-18 | GitHub is treated as a tool, with no plan-specific assumptions. Repos span several orgs, so shared files are vendored per repo (former T13 dropped) |
 | — | 2026-10-18 | Metrics tooling is written in Go (`tools/review-metrics`), using the libraries `gh` uses |
 | — | 2026-10-19 | No standalone regression tests. Bug fixes extend the normal tests; changes that don't alter behaviour add no tests. Reviewers flag test sprawl as Important |
+| — | 2026-10-20 | Repetitive, deterministic checks are scripts or programs that run in CI and in the local check command, never instructions to the LLM reviewer. `REVIEW.md` holds judgement only |
+| — | 2026-10-20 | Repository readiness (lint, flaky tests, CI time, test gaps in critical areas, deterministic checks) is hand-made work done before automated review starts on a repo. Test coverage is a per-area map, with no percentage gate |
+| — | 2026-10-20 | User-facing changes carry user docs or a docs note; where and in which format is set per repo in `AGENTS.md` |

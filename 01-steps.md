@@ -20,7 +20,7 @@ Phase 0  Discover & baseline                       (~1–2 weeks)
 Phase 1  Foundations + review-wait quick wins      (~2 weeks)
    │
    ├── Phase 2  Per-project docs (AGENTS.md / REVIEW.md)    ┐
-   ├── Phase 3  Verification before the PR                  ├ in parallel
+   ├── Phase 3  Repo readiness, verification before PR      ├ in parallel
    └── Phase 4  Knowledge sharing & ownership model ┘
    │
 Phase 5  Automated review on PRs (pilot repo)
@@ -35,6 +35,7 @@ Phase 9  Widen to all repos (ongoing)
 ```
 
 > Knowledge sharing runs early: it attacks silos directly and also reduces review wait (more people able to review).
+> Repository readiness (Phase 3) is done before Phase 5. An automated reviewer on a flaky, unlinted repo with thin tests produces mostly noise.
 > Risk-tiered approval stays after the feedback loops: we only lighten human review once data shows the automated layers catch what they should.
 
 ---
@@ -104,10 +105,11 @@ Review-wait quick wins:
 - [ ] 2.1 🟢 Use `AGENTS.md` (vendor-neutral; decided). Add a one-line pointer file only for tools that require their own name
 - [ ] 2.2 🟢 Pilot repo `AGENTS.md` — **drafted by someone who is not the main owner, reviewed by the owner**. Writing it is itself a learning exercise
 - [ ] 2.3 🟢 Pilot repo `REVIEW.md` — owner corrects a draft extracted from their past review comments ([`00-plan.md` §5.5](00-plan.md#55-getting-knowledge-out-of-peoples-heads)); secondary owner reviews it
-- [ ] 2.4 🟢 Mine past human review comments; move recurring mechanical ones into lint rules, judgement ones into `REVIEW.md`
+- [ ] 2.4 🟢 Mine past human review comments; move recurring mechanical ones into lint rules or CI checks, judgement ones into `REVIEW.md`
 - [ ] 2.4b 🟡 If several repos share a stack: extract common rules into `shared/<family>-guidelines.md` and vendor a copy into each repo with the sync tool (no cross-org references) 🔎 [D8]
 - [ ] 2.5 🟡 Add the doc maintenance rules ([`00-plan.md` §5.3](00-plan.md#53-how-these-docs-improve-over-time)) to each repo's contributing guide (vendored with the other shared files)
 - [ ] 2.6 🟡 Agree length limits and a quarterly prune slot 🔎 [D2, D3]
+- [ ] 2.7 🟢 **User documentation rules** in `AGENTS.md`: what counts as user-facing, where docs go, the format (full page or docs note) and who picks them up ([`00-plan.md` §5.6](00-plan.md#56-user-facing-documentation-docs-sync)) 🔎 [D10]
 
 **Exit criteria:**
 - Both files exist on pilot repo and are reviewed by both owners
@@ -115,18 +117,32 @@ Review-wait quick wins:
 
 ---
 
-## Phase 3 — Verification before the PR
+## Phase 3 — Repository readiness and verification before the PR
 
-**Goal:** routine mistakes caught before anyone else looks. *Parallel with 2 and 4.*
+**Goal:** the repo is ready for automated review ([`00-plan.md` §3.2](00-plan.md#32-repository-readiness)), and routine mistakes are caught before anyone else looks. *Parallel with 2 and 4. Must be done before Phase 5.*
 
+Verification before the PR:
 - [ ] 3.1 🟢 One documented check command that runs format, vet, lint and tests (in cass-operator: `make test`), listed in `AGENTS.md`. No separate pre-commit hooks are needed when this exists; add them only to repos without such a command 🔎 [T7]
 - [ ] 3.3 🟢 Local review step: fresh-context review of the diff + local security review 🔎 [T8]
 - [ ] 3.4 🟢 Automated test results are read from CI, not copied into the PR. The description only covers **manual testing** that CI can't show
 - [ ] 3.5 🟡 UI repos: define visual verification 🔎 [T9]
 
+Repository readiness (one-off, hand-made; scheduled automation only keeps it from slipping back):
+- [ ] 3.6 🟢 **Lint:** enable the full linter config and fix the codebase, one linter per PR (pilot: [lint proposal](pilot/cass-operator/lint-proposal.md))
+- [ ] 3.7 🟢 **Flaky-test burn-down:** fix or quarantine the known flaky tests, worst first, until the CI re-run rate is below the target. Upload test reports (`go test -json` or JUnit) as CI artifacts so failures can be counted per test 🔎 [T21, M8]
+- [ ] 3.8 🟢 **CI time:** measure time to green and queue time per workflow and job, then do the cheap wins: cancel superseded runs, Go and image caches, images built once per run, one gate job for path-filtered suites 🔎 [T24]
+- [ ] 3.9 🟢 **Test gaps in critical areas:** a combined coverage map per area (unit, envtest, end-to-end). Owners pick the gaps that matter, and tests are added at the right level. No coverage percentage gate 🔎 [T25]
+- [ ] 3.10 🟢 **Deterministic checks:** every mechanical rule in `REVIEW.md`, the shared guidelines and the PR template becomes a CI check that also runs in the local check command: changelog fragment, generated files up to date, linked issue, the `needs-human` detector ([`00-plan.md` §3.1](00-plan.md#31-deterministic-checks-are-code-not-review)) 🔎 [T17]
+- [ ] 3.11 🟢 **Docs check:** user-facing changes carry a docs note or docs link, or `skip-docs` with a reason. New CRD fields have descriptions ([`00-plan.md` §5.6](00-plan.md#56-user-facing-documentation-docs-sync)) 🔎 [D10]
+- [ ] 3.12 🟡 **Changed-lines coverage** shown on each PR as information for the reviewer, not a gate 🔎 [T25]
+
 **Exit criteria:**
 - Authors and agents run the check command before opening a PR (CI failures on first push trend down)
 - Local review step used by the whole pilot team
+- The full linter config passes on the default branch
+- CI re-run rate below the target for two weeks; CI time to green and queue time measured
+- Critical areas have a coverage map, and the gaps owners chose are closed
+- No mechanical rule is left only in `REVIEW.md` without a check or a "temporary" mark
 
 ---
 
@@ -150,7 +166,7 @@ Review-wait quick wins:
 
 ## Phase 5 — Automated review on every PR (pilot)
 
-**Goal:** an automated reviewer comments on every pilot PR; findings are high-signal and must be answered.
+**Goal:** an automated reviewer comments on every pilot PR; findings are high-signal and must be answered. Starts only when the pilot repo meets the Phase 3 exit criteria.
 
 - [ ] 5.1 🟢 Integrate automated review as a GitHub Actions workflow on `pull_request` 🔎 [T3]
 - [ ] 5.1b 🟢 Public repos: decide how fork PRs get reviewed without exposing secrets ([`00-plan.md` §8](00-plan.md#8-open-source-repositories)) 🔎 [T16]
@@ -227,6 +243,6 @@ Review-wait quick wins:
 ## Phase 9 — Widen and sustain (ongoing)
 
 - [ ] 9.1 🟡 Short adoption guide from pilot learnings
-- [ ] 9.2 🟡 Roll to remaining repos in order of pain (most waiting / most siloed first). Shared pieces are vendored into each repo with the sync tool; each repo adds its own `AGENTS.md`, `REVIEW.md`, CODEOWNERS
+- [ ] 9.2 🟡 Roll to remaining repos in order of pain (most waiting / most siloed first). Shared pieces are vendored into each repo with the sync tool; each repo adds its own `AGENTS.md`, `REVIEW.md`, CODEOWNERS and goes through Phase 3 readiness before automated review
 - [ ] 9.3 🟡 Quarterly: doc prune (repo and shared), risk-tier review, graduated-ownership review, knowledge-spread check
 - [ ] 9.4 🟡 Revisit out-of-scope items (tooling/vendor choices) once gaps are clear
