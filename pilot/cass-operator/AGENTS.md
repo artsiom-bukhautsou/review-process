@@ -60,6 +60,14 @@ Run `make test` before opening a PR. CI results appear on the PR, so don't paste
 <!-- confirm -->
 - A second way to configure something that already has one. For example, ports are configured through `containerPort` in the pod template, not through `cassandra-yaml`.
 
+## User documentation
+
+<!-- confirm (D10) -->
+- **User-facing:** `CassandraDatacenter` and `CassandraTask` fields, annotations the operator reads, operator config and environment variables, changes in how operations behave, new status conditions, events and metrics.
+- **Where:** <!-- confirm: in-repo docs vs the k8ssandra docs site, and who picks up docs notes -->
+- **Format:** a docs note in the changelog fragment (`docs:` field) once step 1.6b lands; until then, a linked docs issue.
+- **New CRD fields** need a doc comment. controller-gen turns it into the field description that `kubectl explain` shows.
+
 ## Further reading
 
 - Review guidance: [`REVIEW.md`](REVIEW.md)

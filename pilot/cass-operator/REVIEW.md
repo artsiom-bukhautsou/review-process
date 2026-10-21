@@ -23,13 +23,16 @@ A healthy Cassandra cluster gets disrupted. This includes an unexpected rolling 
 
 ## Repo hygiene (flag as Important)
 
-- No changelog entry (a fragment, once 1.6b is in place; until then under `## unreleased` in `CHANGELOG.md`), a wrong category, or no linked issue.
-- `apis/` changed but generated files not regenerated, or regenerated with a different controller-gen version.
+Items marked *(CI)* are mechanical. They stay here only until the matching CI check exists, then the line is deleted ([plan §3.1](../../00-plan.md#31-deterministic-checks-are-code-not-review)).
+
+- No changelog entry (a fragment, once 1.6b is in place; until then under `## unreleased` in `CHANGELOG.md`), a wrong category, or no linked issue. *(CI for a missing entry or issue; the category is judgement)*
+- `apis/` changed but generated files not regenerated, or regenerated with a different controller-gen version. *(CI)*
 - Image or version references hardcoded in Go instead of `config/imageconfig`.
 - Unrelated changes: reformatting, untouched files in the diff, test data edited without the test needing it.
-- **New `//nolint` directives**: always flag these. The PR needs human approval whatever its risk tier, and the directive must name the linter and give a reason.
+- **New `//nolint` directives** *(CI detector, T17)*: always flag these. The PR needs human approval whatever its risk tier, and the directive must name the linter and give a reason.
+- **User-facing change without docs**: a change users can see (fields, annotations, behaviour, metrics) with no docs note or docs link, even when the changelog kind isn't `FEATURE` ([plan §5.6](../../00-plan.md#56-user-facing-documentation-docs-sync)).
 - **Test sprawl** ([shared §6, items 7–8](../../shared/go-operator-guidelines.md#6-tests)): standalone regression tests, or new tests for a change that doesn't alter behaviour. Report it once per PR and list every such test. For each one, say which existing test the case belongs in, or that it can be deleted.
-- **Changed or removed assertions in existing tests**: different expected values, relaxed matchers, deleted checks, skipped tests. Always flag these, and the PR needs human approval whatever its risk tier. The PR description must explain why the expectation changed.
+- **Changed or removed assertions in existing tests** *(CI detector, T17)*: different expected values, relaxed matchers, deleted checks, skipped tests. Always flag these, and the PR needs human approval whatever its risk tier. The PR description must explain why the expectation changed.
 
 ## Don't flag
 

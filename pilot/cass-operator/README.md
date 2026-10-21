@@ -71,7 +71,11 @@ People who authored or reviewed in each area, over the same period:
 | 1.3 | Enable conversation resolution and stale-approval dismissal on `master` |
 | 1.4 | CODEOWNERS: `.github/workflows/`, `apis/`, `internal/webhooks/` → named owners; the rest → maintainers team |
 | 2.x | Owner corrects [`REVIEW.md`](REVIEW.md) and the shared guidelines; a non-owner commits [`AGENTS.md`](AGENTS.md) |
-| 2.4 | Enable `revive`, `govet` and the additions, fixing the code in the same PRs ([`lint-proposal.md`](lint-proposal.md)) |
+| 2.4, 3.6 | Enable `revive`, `govet` and the additions, fixing the code in the same PRs ([`lint-proposal.md`](lint-proposal.md)) |
+| 2.7 | User docs: confirm where cass-operator's user docs live and who picks up docs notes (D10) |
+| 3.7 | Flaky-test burn-down: start with the Kind integration tests, which caused 4 of 5 re-runs |
+| 3.9 | Coverage map first for `internal/webhooks` (a critical area with the thinnest knowledge spread) and the scale and decommission paths in `pkg/reconciliation` |
+| 3.10 | Move the *(CI)* items in [`REVIEW.md`](REVIEW.md) "Repo hygiene" into CI: changelog fragment, generated-files diff after `make manifests generate`, `//nolint` and changed-assertion detection. The linked-issue check already exists |
 | 4.x | Pick `internal/webhooks` and one part of `pkg/reconciliation` (e.g. decommission) as the first areas where a second person **authors** changes, with the "explain it back" norm; gaps found go into `docs/developer/` (starting with replacing the outdated `kind.md` with `hack/cluster.sh` usage) |
 | 5.1b | Decide fork-PR handling (T16) before the reviewer workflow goes live, since outside contributors open PRs here |
 | 6.2 | Eval set: use past `[BUGFIX]` entries in the CHANGELOG that link to the PR that introduced the bug, plus bugs found in review (the harvested comments show where), confirmed by the main maintainer |
