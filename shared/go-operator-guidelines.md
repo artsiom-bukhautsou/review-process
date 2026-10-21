@@ -18,6 +18,7 @@
 7. **Respect controller lag.** The StatefulSet controller (or any other) may not have caught up yet. Don't act on objects whose status doesn't reflect the latest change. Show where in the sequence that situation is handled.
 8. **State in goroutines doesn't persist.** Anything a goroutine computes is lost unless it's written to an object, for example a status or an annotation. Don't mutate outer variables from inside one and expect it to matter.
 9. **Fatal startup errors exit.** In `main`, an error that should stop the process calls `os.Exit(1)`. It must not carry on and start reconcilers.
+10. **Expected transient conditions aren't errors.** A 409 conflict caused by a stale cache, or NotFound right after a create, resolves on its own. Requeue (for example `RequeueSoon`) without returning an error, so it doesn't produce a Warning event or an error log.
 
 ## 2. Kubernetes semantics
 
@@ -92,7 +93,7 @@ Waiting and polling (envtest and end-to-end):
 1. **No unrelated changes.** No mass re-indents, no touching files without a change, no reformatting outside the diff.
 2. **Every change has an issue.** Follow-ups get a ticket in the repo, not a TODO.
 3. **CHANGELOG entry** in the repo's format (see each repo's `REVIEW.md`).
-4. **Classify changes correctly.** If nothing was broken, it isn't a bugfix.
-5. **Changed assertions in existing tests need a human.** If a PR modifies or removes an assertion in an existing test (a different expected value, a relaxed matcher, a deleted check, a skipped test), the reviewer flags it as Important and the PR requires human approval regardless of risk tier. Sometimes the change is correct because behaviour changed on purpose. But it is also the easiest way to hide a newly introduced bug. The PR description must say why the expectation changed.
+4. **Classify changes as well as you can.** If nothing was broken, it isn't a bugfix. The category is the author's call, so reviewers don't flag it.
+5. **Changed assertions in existing tests need a human.** If a PR modifies or removes an assertion in an existing test (a different expected value, a relaxed matcher, a deleted check, a skipped test), the reviewer lists it on the `Needs human:` line of its summary, and the PR requires human approval regardless of risk tier. Sometimes the change is correct because behaviour changed on purpose. But it is also the easiest way to hide a newly introduced bug. The PR description must say why the expectation changed.
 6. **New lint suppressions need a human.** A new `//nolint` directive must name the specific linter and give a reason (`nolintlint` enforces both). Even then, the PR needs human approval regardless of risk tier. Suppressions are sometimes necessary, but each one switches off a check for good.
 7. **User-facing changes come with user docs:** a docs note or a docs link, in the place and format the repo's `AGENTS.md` names. Internal changes need none.

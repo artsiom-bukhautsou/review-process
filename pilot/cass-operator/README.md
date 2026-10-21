@@ -59,14 +59,14 @@ People who authored or reviewed in each area, over the same period:
 4. **Several recurring comments are lintable.** `revive` and `govet` are already configured but disabled ([`lint-proposal.md`](lint-proposal.md)).
 5. **15% of PRs merged without a second person.** This is fine for genuinely low-risk changes, but today it happens without a written rule. Risk tiers (Phase 7) make it explicit.
 6. **The PR template lacks risk, rollback and follow-up links.** It has a checklist (tests, docs, CHANGELOG, CLA) but no **Risk**, **How to revert** or **Follow-up to** field. Without that field, fix-forward PRs can't be linked to the PR that caused the problem.
-7. **The OSS setup is already partly there.** A linked-issue check, OSV scanner and govulncheck run in CI. CODEOWNERS is a single team, with no path-specific owners.
+7. **The OSS setup is already partly there.** A linked-issue check, a generated-files check, OSV scanner and govulncheck run in CI. CODEOWNERS is a single team, with no path-specific owners.
 8. **Friction is large.** Nearly half of all PRs needed a branch update, mostly rebases, which also break review threads. A quarter needed CI re-runs, almost all in the Kind integration tests. Changelog fragments (1.6b), the update-only-on-conflict norm (1.6d) and flaky-test hunting in the Kind suites (1.6c) target exactly this.
 
 ## Pilot plan (deviations from `01-steps.md` only)
 
 | Step | Pilot-specific action |
 |---|---|
-| 1.1 | Extend the existing PR template: keep the CLA and issue lines and the "manually tested" flag (as a **Manual testing** section); add **Follow-up to**, **Risk**, **How to revert**. Drop the "automated tests added" checkbox, since CI and the diff show it |
+| 1.1 | Extend the existing PR template: keep the CLA and issue lines and the "manually tested" flag (as a **Manual testing** section); add **Follow-up to**, **Risk**, **How to revert**, **Intentional trade-offs**. Drop the "automated tests added" checkbox, since CI and the diff show it |
 | 1.6b | Changelog fragments: `CHANGELOG.md` is the main source of conflicts and branch updates here |
 | 1.3 | Enable conversation resolution and stale-approval dismissal on `master` |
 | 1.4 | CODEOWNERS: `.github/workflows/`, `apis/`, `internal/webhooks/` → named owners; the rest → maintainers team |
@@ -75,7 +75,7 @@ People who authored or reviewed in each area, over the same period:
 | 2.7 | User docs: confirm where cass-operator's user docs live and who picks up docs notes (D10) |
 | 3.7 | Flaky-test burn-down: start with the Kind integration tests, which caused 4 of 5 re-runs |
 | 3.9 | Coverage map first for `internal/webhooks` (a critical area with the thinnest knowledge spread) and the scale and decommission paths in `pkg/reconciliation` |
-| 3.10 | Move the *(CI)* items in [`REVIEW.md`](REVIEW.md) "Repo hygiene" into CI: changelog fragment, generated-files diff after `make manifests generate`, `//nolint` and changed-assertion detection. The linked-issue check already exists |
+| 3.10 | Move the *(CI)* items in [`REVIEW.md`](REVIEW.md) "Repo hygiene" and "Needs a human" into CI: changelog fragment, `//nolint` and changed-assertion detection. The linked-issue check and the generated-files check (`make manifests generate` must leave no diff) already exist |
 | 4.x | Pick `internal/webhooks` and one part of `pkg/reconciliation` (e.g. decommission) as the first areas where a second person **authors** changes, with the "explain it back" norm; gaps found go into `docs/developer/` (starting with replacing the outdated `kind.md` with `hack/cluster.sh` usage) |
 | 5.1b | Decide fork-PR handling (T16) before the reviewer workflow goes live, since outside contributors open PRs here |
 | 6.2 | Eval set: use past `[BUGFIX]` entries in the CHANGELOG that link to the PR that introduced the bug, plus bugs found in review (the harvested comments show where), confirmed by the main maintainer |

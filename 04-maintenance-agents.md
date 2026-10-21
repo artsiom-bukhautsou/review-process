@@ -27,7 +27,7 @@ Agent output goes through the same review process as everyone else's. An agent t
 
 | Rule | Why |
 |---|---|
-| **Deterministic first, model second.** A Go tool finds the candidates (unreachable code, CI failures, test reports). The model only does the judgement ("is this a real flake, and how do we fix it?") and writes the change | Cheaper and repeatable, and the candidate list can be checked. The same rule as for review: deterministic checks are code ([`00-plan.md` §3.1](00-plan.md#31-deterministic-checks-are-code-not-review)) |
+| **Deterministic first, model second.** A Go tool finds the candidates (unreachable code, CI failures and their logs). The model only does the judgement ("is this a real flake, and how do we fix it?") and writes the change | Cheaper and repeatable, and the candidate list can be checked. The same rule as for review: deterministic checks are code ([`00-plan.md` §3.1](00-plan.md#31-deterministic-checks-are-code-not-review)) |
 | **Small, single-purpose PRs** with the evidence in the description: tool output, before/after test runs. One test, one package or one switch per PR | Easy to review, easy to revert. One large agent PR costs more review than it saves |
 | **Review budget.** At most 1–2 open PRs per agent per repo. While those are open, new findings go into the agent's report instead of new PRs | An agent that floods the queue increases review wait, which is the opposite of the goal |
 | **No duplicates.** Output is labelled `agent/<name>`. Before creating anything, the agent checks open issues and PRs, and ones closed as "won't fix" | Rejected suggestions don't come back every week |
@@ -99,7 +99,7 @@ This is the first agent to build. Every flaky failure costs a re-run, another wa
 
 **Weekly run:**
 
-1. **Collect.** All CI runs from the last week, for PRs and the default branch, in every repo in scope. A failure counts as flaky when the same SHA later passed on a re-run, or when the same test fails on unrelated PRs. Failures are read per test from test reports uploaded as CI artifacts (`gotestsum --junitfile`, or `go test -json`), not per job (T21). Uploading test reports is a prerequisite.
+1. **Collect.** All CI runs from the last week, for PRs and the default branch, in every repo in scope. A failure counts as flaky when the same SHA later passed on a re-run, or when the same test fails on unrelated PRs. Failures are read per test from the failed jobs' logs (`gh run view --log-failed`), not per job (T21). Logs are kept for 90 days by default, which is enough for a weekly run, so no test-report artifacts are needed.
 2. **Group** by test name and failure signature: the assertion message, panic or timeout, with names, IDs and timestamps stripped. Rank the groups by occurrences × CI time lost.
 3. **Classify** each group:
 
@@ -157,7 +157,7 @@ Not a weekly fixer. This is mostly a metric with an alert, plus improvement work
 | Queue time (job created → started) | Rising queue time means too few runners: the "running out of resources" signal |
 | Duration per job | Where the time goes |
 | Runner minutes (billable where it applies) | Cost, and limits on hosted runners |
-| Slowest tests (from the test reports used in 2.1) | Targets for speed-up |
+| Slowest tests (durations from the job logs) | Targets for speed-up |
 | Cache hit rate (Go module and build cache, image layers) | A drop is usually a cheap fix |
 | Superseded runs that weren't cancelled | Wasted minutes |
 
@@ -242,6 +242,7 @@ Ideas that come from the automation and development side rather than from review
 - **Kubernetes version support** 🟡. Adds new Kubernetes minor versions to the end-to-end matrix when kind images exist, drops end-of-life ones according to the support policy, and scans code and manifests for deprecated or removed API versions. A scheduled PR is cheaper than a user's bug report or a surprise failure on an unrelated PR.
 - **Broken default branch** 🟡. When CI on the default branch turns red, the agent finds the commit that broke it (re-run, then bisect) and comments on that PR, mentioning its author, who owns the fix ([§4](00-plan.md#4-where-humans-stay-in-the-loop) accountability). Supports P6, "who watches after merge".
 - **Test-suite hygiene** 🟡. Tests that duplicate each other, tests whose assertions can't fail, standalone regression tests that belong in the normal tests ([shared guidelines §6](shared/go-operator-guidelines.md#6-tests)), unit tests that are slow. Consolidation PRs, kept rare and small, because changes to existing tests always need a human.
+- **Tech-debt fixer** 🟡. The automated reviewer lists pre-existing problems in its summary, each with a proposed `tech-debt` issue. A human triages the issue. When they label it for agents, the agent opens a small fix PR, which needs human approval like any other. Examples: an error that retries forever and should be terminal, or a missing status condition.
 - **Stale PRs and branches** ⚪. Closes abandoned drafts and agent PRs after a notice, deletes merged branches. Little value for a small team; useful once several agents run.
 - **Issue preparation** ⚪. For a new bug report: find the relevant code, try to reproduce it on kind, link recent changes in that area. A well-prepared issue leads to a smaller, more focused fix PR.
 
@@ -251,7 +252,7 @@ Ideas that come from the automation and development side rather than from review
 
 | Step | What | Depends on |
 |---|---|---|
-| 0 🟢 | Repository readiness by hand ([`01-steps.md` Phase 3](01-steps.md#phase-3--repository-readiness-and-verification-before-the-pr)): lint, flaky-test burn-down with test reports uploaded as CI artifacts, CI quick wins, test gaps, deterministic checks | — |
+| 0 🟢 | Repository readiness by hand ([`01-steps.md` Phase 3](01-steps.md#phase-3--repository-readiness-and-verification-before-the-pr)): lint, flaky-test burn-down, CI quick wins, test gaps, deterministic checks | — |
 | 1 🟢 | Flaky-test fixer: report-only for two runs, then fix PRs | 0, T21 |
 | 2 🟢 | Agent-context tuner: deterministic `AGENTS.md` checks first, then the monthly PR | Finding outcomes recorded (Phase 5, Loop A) |
 | 3 🟡 | CI time and cost tracker in `review-metrics`, weekly report | 0 (baseline) |
@@ -259,16 +260,6 @@ Ideas that come from the automation and development side rather than from review
 | 5 🟡 | Dead-code remover, `internal/` only | — |
 | 6 🟡 | Stale-experiment report | Coverage map (3.9), A6 |
 | 7 🟡 | Others from [§3](#3-other-candidates), when a metric points at them | — |
-
----|---|---|
-| 1 🟢 | Upload test reports as CI artifacts in the pilot repo (`gotestsum --junitfile` or `go test -json`) | — |
-| 2 🟢 | Flaky-test fixer: report-only for two runs, then fix PRs | 1, T21 |
-| 3 🟢 | Agent-context tuner: deterministic `AGENTS.md` checks first, then the monthly PR | Finding outcomes recorded (Phase 5, Loop A) |
-| 4 🟢 | Generated-files check in CI | — |
-| 5 🟡 | CI time and cost tracker in `review-metrics`, weekly report | — |
-| 6 🟡 | Dead-code remover, `internal/` only | — |
-| 7 🟡 | Stale-experiment report | Coverage runs, A6 |
-| 8 🟡 | Others from [§3](#3-other-candidates), when a metric points at them | — |
 
 ---
 
@@ -278,7 +269,7 @@ Ideas that come from the automation and development side rather than from review
 |---|---|---|---|---|
 | A1 | Where does the scheduled agent's model run, and how is cost capped per run (token or time budget)? Vendor choice is out of scope ([§9](00-plan.md#9-explicitly-out-of-scope-this-round)), a budget isn't | Weekly jobs across many repos add up | open | |
 | A2 | One GitHub App per org for all agents, or one per agent? Should it be the same identity as the automated reviewer? | Permissions, and telling agent PRs apart in metrics | open | |
-| A3 | Test reports: JUnit or `go test -json`? Is artifact retention long enough for trends, or does a weekly collector copy them into the metrics store? | 2.1 and 2.3 both depend on per-test history | open | |
+| A3 | Test reports: JUnit or `go test -json`? Is artifact retention long enough for trends, or does a weekly collector copy them into the metrics store? | 2.1 and 2.3 both depend on per-test history | decided | No test-report artifacts. 2.1 and 2.3 read per-test failures and durations from the job logs (kept 90 days by default) |
 | A4 | Flaky end-to-end tests that can't be reproduced locally: how many quiet weeks close the issue? | Avoids closing on luck | open | |
 | A5 | Public packages: is code search in our orgs plus pkg.go.dev "Imported by" enough evidence, given users we can't see? How long is the deprecation period? | Removing exported API breaks others | open | |
 | A6 | Which switches count as experiments in each repo (annotations, env vars, gates)? Needs an owner's list for the pilot | Seeds the 2.5 inventory | open | |

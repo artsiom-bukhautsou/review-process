@@ -129,7 +129,7 @@ Verification before the PR:
 
 Repository readiness (one-off, hand-made; scheduled automation only keeps it from slipping back):
 - [ ] 3.6 🟢 **Lint:** enable the full linter config and fix the codebase, one linter per PR (pilot: [lint proposal](pilot/cass-operator/lint-proposal.md))
-- [ ] 3.7 🟢 **Flaky-test burn-down:** fix or quarantine the known flaky tests, worst first, until the CI re-run rate is below the target. Upload test reports (`go test -json` or JUnit) as CI artifacts so failures can be counted per test 🔎 [T21, M8]
+- [ ] 3.7 🟢 **Flaky-test burn-down:** fix or quarantine the known flaky tests, worst first, until the CI re-run rate is below the target. Failures are counted per test from re-runs and the failed jobs' logs 🔎 [T21, M8]
 - [ ] 3.8 🟢 **CI time:** measure time to green and queue time per workflow and job, then do the cheap wins: cancel superseded runs, Go and image caches, images built once per run, one gate job for path-filtered suites 🔎 [T24]
 - [ ] 3.9 🟢 **Test gaps in critical areas:** a combined coverage map per area (unit, envtest, end-to-end). Owners pick the gaps that matter, and tests are added at the right level. No coverage percentage gate 🔎 [T25]
 - [ ] 3.10 🟢 **Deterministic checks:** every mechanical rule in `REVIEW.md`, the shared guidelines and the PR template becomes a CI check that also runs in the local check command: changelog fragment, generated files up to date, linked issue, the `needs-human` detector ([`00-plan.md` §3.1](00-plan.md#31-deterministic-checks-are-code-not-review)) 🔎 [T17]
@@ -170,7 +170,7 @@ Repository readiness (one-off, hand-made; scheduled automation only keeps it fro
 
 - [ ] 5.1 🟢 Integrate automated review as a GitHub Actions workflow on `pull_request` 🔎 [T3]
 - [ ] 5.1b 🟢 Public repos: decide how fork PRs get reviewed without exposing secrets ([`00-plan.md` §8](00-plan.md#8-open-source-repositories)) 🔎 [T16]
-- [ ] 5.2 🟢 Inline comments tagged **Important / Nit / Pre-existing**
+- [ ] 5.2 🟢 Inline comments tagged **Important / Nit**. **Pre-existing** findings go in the summary only, each with a proposed `tech-debt` issue. Changes that always need a human get a `Needs human:` marker line, not a finding
 - [ ] 5.3 🟡 Separate security review pass 🔎 [T4]
 - [ ] 5.4 🟢 Drop style-only findings (lint's job)
 - [ ] 5.5 🟢 Every finding fixed or resolved with a reason; conversation resolution blocks merge (from 1.3)

@@ -28,6 +28,9 @@ Follow-up to:
 Tier:
 What could go wrong:
 
+## Intentional trade-offs
+<!-- Known limitations, or cases this PR deliberately doesn't handle, and why. The automated reviewer doesn't flag what's stated here. "None" is a valid answer. -->
+
 ## How to revert
 <!-- Plain revert? Needs a follow-up fix instead (data/CRD migrations)? Anything that can't be undone? -->
 
@@ -106,6 +109,12 @@ Owners: <team or people>
 - Style issues the linter already enforces
 - Anything a CI check already enforces (changelog fragment, generated files, linked issue)
 - <patterns that look wrong but are intentional, with a short why>
+- Trade-offs the PR description states, unless they lead to a failure under "What failure looks like here". Then ask, don't report a finding
+
+## Needs a human (a marker, not a finding)
+New `//nolint` directives and changed or removed assertions in existing tests need human approval even when correct.
+List them on one line at the end of the summary: `Needs human: <what> in <file:line>. Explained in the description: yes/no.`
+Report a finding only when the description doesn't explain the change.
 
 ## Skip these paths
 - `generated/**`
@@ -118,6 +127,7 @@ Every finding must cite a file and line, and explain the concrete failure. No gu
 ## Limits
 - At most <3> nits per review.
 - Tag each finding: Important / Nit / Pre-existing.
+- Pre-existing findings don't count toward the limits. List them in the summary only, each with a one-line proposed `tech-debt` issue.
 - Don't repeat findings already posted on this PR.
 - If a bug pattern appears more than once, flag the pattern and list all instances.
 

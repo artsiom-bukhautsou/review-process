@@ -25,7 +25,7 @@ Tighten `nolintlint`, which is already enabled: set `require-specific: true` (it
 
 Already enabled and worth keeping: `nonamedreturns`, `ginkgolinter` (focus and spec pollution), `nolintlint`, `unparam`, `whitespace`.
 
-Candidate to look into: a check that fails when `make manifests generate` produces a diff, so stale generated files are caught by CI and not by a reviewer.
+Stale generated files are already caught in CI: `operatorBuildAndDeploy.yml` fails when `make manifests generate` leaves a diff.
 
 ## Rollout
 

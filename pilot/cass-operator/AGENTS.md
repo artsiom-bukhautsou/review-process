@@ -4,7 +4,7 @@
 
 ## What this is
 
-A Kubernetes operator that deploys and operates Apache Cassandra, DSE and HCD clusters. Its main resources are `CassandraDatacenter` (`cassandra.datastax.com/v1beta1`) and `CassandraTask` (`control.k8ssandra.io/v1alpha1`). It talks to each node through the Management API sidecar. It runs standalone and as part of k8ssandra-operator, so changes must work for both.
+A Kubernetes operator that deploys and operates Apache Cassandra, DSE and HCD clusters. Its main resources are `CassandraDatacenter` (`cassandra.datastax.com/v1beta1`) and `CassandraTask` (`control.k8ssandra.io/v1alpha1`). It talks to each node through the Management API sidecar. It runs standalone and as part of k8ssandra-operator, so changes must work for both. k8ssandra-operator and k8ssandra-client (the `kubectl k8ssandra` plugin) also import `pkg/httphelper` as a library.
 
 ## Layout
 
@@ -40,7 +40,7 @@ Run `make test` before opening a PR. CI results appear on the PR, so don't paste
 - **Branch updates:** merge `master` into your branch only when there's a conflict. Don't rebase or force-push once human review has started.
 - **Lint suppressions:** avoid `//nolint`. If one is unavoidable, name the linter and give a reason; the PR will need human approval.
 - **Every PR links an issue.** A workflow checks this.
-- **API changes** must stay compatible with existing `CassandraDatacenter` resources and with k8ssandra-operator.
+- **API changes** must stay compatible with existing `CassandraDatacenter` resources and with k8ssandra-operator. The exported behaviour of `pkg/httphelper` must stay compatible with k8ssandra-operator and k8ssandra-client.
 - **Server differences matter.** `serverType` is `cassandra`, `dse` or `hcd`, and behaviour often depends on version, for example 3.11, 4.x or 5.x. Gate version-specific code explicitly.
 - **Three test levels** (details in the [shared guidelines §6](../../shared/go-operator-guidelines.md#6-tests)):
   - **Unit tests** sit next to the code and use testify, with `require` for error checks.
