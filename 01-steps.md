@@ -14,24 +14,24 @@ A small team can run the 🟢 steps alone and stop there. See [`00-plan.md` §0.
 
 Phases are ordered by dependency, but some run in parallel. We start on **one pilot repo**, then widen. **Phase 1 includes quick wins** for review wait that need no new tooling.
 
-```
-Phase 0  Discover & baseline                       (~1–2 weeks)
-   │
-Phase 1  Foundations + review-wait quick wins      (~2 weeks)
-   │
-   ├── Phase 2  Per-project docs (AGENTS.md / REVIEW.md)    ┐
-   ├── Phase 3  Repo readiness, verification before PR      ├ in parallel
-   └── Phase 4  Knowledge sharing & ownership model ┘
-   │
-Phase 5  Automated review on PRs (pilot repo)
-   │
-Phase 6  Feedback loops & eval set
-   │
-Phase 7  Risk-tiered approval
-   │
-Phase 8  Merge queue, flags, rollback
-   │
-Phase 9  Widen to all repos (ongoing)
+```mermaid
+flowchart TD
+    P0["Phase 0 · Discover #amp; baseline (~1–2 weeks)"]
+    P1["Phase 1 · Foundations + review-wait quick wins (~2 weeks)"]
+    subgraph parallel["In parallel"]
+        P2["Phase 2 · Per-project docs (AGENTS.md / REVIEW.md)"]
+        P3["Phase 3 · Repo readiness, verification before PR"]
+        P4["Phase 4 · Knowledge sharing #amp; ownership model"]
+    end
+    P5["Phase 5 · Automated review on PRs (pilot repo)"]
+    P6["Phase 6 · Feedback loops #amp; eval set"]
+    P7["Phase 7 · Risk-tiered approval"]
+    P8["Phase 8 · Merge queue, flags, rollback"]
+    P9["Phase 9 · Widen to all repos (ongoing)"]
+    P0 --> P1
+    P1 --> P2 & P3 & P4
+    P2 & P3 & P4 --> P5
+    P5 --> P6 --> P7 --> P8 --> P9
 ```
 
 > Knowledge sharing runs early: it attacks silos directly and also reduces review wait (more people able to review).

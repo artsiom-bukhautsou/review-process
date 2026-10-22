@@ -103,14 +103,21 @@ We optimise for **human time and attention**, without increasing breakage.
 
 No single check catches everything. Each layer catches some problems and misses others; fast rollback handles what gets through all of them.
 
-```
- Author's machine        Pull request                         Merge            After merge
-┌───────────────┐   ┌──────────────────────────────────┐   ┌──────────┐   ┌────────────────────┐
-│ 1. Verified   │ → │ 2. Required CI                   │ → │ 6. Merge │ → │ 7. Flags, staged    │
-│    before PR  │   │ 3. Automated code review          │   │    queue │   │    release, watch, │
-│               │   │ 4. Automated security review      │   │          │   │    fast rollback   │
-│               │   │ 5. Human approval scaled by risk  │   │          │   │                    │
-└───────────────┘   └──────────────────────────────────┘   └──────────┘   └────────────────────┘
+```mermaid
+flowchart LR
+    subgraph author["Author's machine"]
+        L1["1. Verified before PR"]
+    end
+    subgraph pr["Pull request"]
+        L2["2. Required CI<br/>3. Automated code review<br/>4. Automated security review<br/>5. Human approval scaled by risk"]
+    end
+    subgraph merge["Merge"]
+        L6["6. Merge queue"]
+    end
+    subgraph after["After merge"]
+        L7["7. Flags, staged release,<br/>watch, fast rollback"]
+    end
+    author --> pr --> merge --> after
 ```
 
 For each layer: what it does, what we'd need to create, and the main unknown.
@@ -230,20 +237,31 @@ Humans should only be pulled in when the automated part has finished: CI is done
 
 **Transitions.** The state workflow re-evaluates on: PR opened, ready for review or synchronized; any check run completed; bot reviews and comments posted; and a 15-minute schedule as a fallback, for events Actions can't trigger on.
 
+```mermaid
+stateDiagram-v2
+    direction LR
+    bots: review/bots
+    author: review/author
+    human: review/human
+    [*] --> bots: opened / ready / new push
+    bots --> author: bots done, but CI red or Important findings open
+    bots --> human: all gate conditions hold
+    bots --> human: round cap reached (3 rounds)
+    author --> bots: author's next push
 ```
-opened / ready / new push ──► review/bots      (status: pending; review/human removed)
-review/bots ──► review/author   when all of the below hold, except CI is red or Important findings are open
-review/bots ──► review/human    when ALL of these hold for the head SHA:
-                                  • every required CI check succeeded
-                                  • every configured automated reviewer has a completed check run
-                                    (one check per reviewer, e.g. ai-review/<name>: works with any vendor, and several agents per PR)
-                                  • no bot-authored Important thread is unresolved
-                                  • no bot fix run is in progress, and no bot push in the last N minutes
-                                  • not a draft, and the author's review gate is clear (if on)
-                                → status success, label review/human, request reviewers (CODEOWNERS / team)
-review/author ──► review/bots   on the author's next push
-any bot-triggered return to review/bots counts one round; at 3 ──► round-cap + needs-human + review/human
-```
+
+- **Entering `review/bots`** sets the status to pending and removes `review/human`.
+- **`review/bots` → `review/author`** when all the gate conditions below hold, except CI is red or Important findings are open.
+- **`review/bots` → `review/human`** when ALL of these hold for the head SHA:
+  - every required CI check succeeded
+  - every configured automated reviewer has a completed check run (one check per reviewer, e.g. `ai-review/<name>`: works with any vendor, and several agents per PR)
+  - no bot-authored Important thread is unresolved
+  - no bot fix run is in progress, and no bot push in the last N minutes
+  - not a draft, and the author's review gate is clear (if on)
+
+  Then: status success, label `review/human`, request reviewers (CODEOWNERS / team).
+- **`review/author` → `review/bots`** on the author's next push.
+- **Round cap.** Any bot-triggered return to `review/bots` counts one round; at 3 the PR goes to `review/human` with `round-cap` and `needs-human`.
 
 **Rules that keep it honest:**
 - Agents only pick up PRs labelled `review/bots` or `review/author`. They never push to a PR labelled `review/human` unless a human asks them to.
@@ -331,13 +349,15 @@ Written by **code owners**. Good ones are short and:
 
 When several repos share a stack (e.g. many Go controller-runtime operators), most review rules are the same everywhere. Layer the docs so each rule is written once:
 
-```
-<source-of-truth repo>/shared/<family>-guidelines.md   ← rules for every repo in the family
-        │ copied into each repo by the sync tool (no cross-org references)
-        ▼
-<repo>/.review/<family>-guidelines.md   ← vendored copy, with a header naming the source version
-<repo>/AGENTS.md                   ← what this repo is, how to verify, repo-specific conventions
-<repo>/REVIEW.md                   ← what failure looks like in this repo, repo-specific checks, skip paths
+```mermaid
+flowchart TD
+    shared["#lt;source-of-truth repo#gt;/shared/#lt;family#gt;-guidelines.md<br/><i>rules for every repo in the family</i>"]
+    subgraph repo["#lt;repo#gt;"]
+        vendored[".review/#lt;family#gt;-guidelines.md<br/><i>vendored copy, with a header naming the source version</i>"]
+        agents["AGENTS.md<br/><i>what this repo is, how to verify, repo-specific conventions</i>"]
+        review["REVIEW.md<br/><i>what failure looks like in this repo, repo-specific checks, skip paths</i>"]
+    end
+    shared -- "copied into each repo by the sync tool<br/>(no cross-org references)" --> vendored
 ```
 
 - A rule that recurs in two or more repos moves **up** into the shared file.
