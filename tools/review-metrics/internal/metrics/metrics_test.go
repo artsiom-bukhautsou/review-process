@@ -143,7 +143,7 @@ func TestHumanReviewsExcludesBotsAndSelf(t *testing.T) {
 }
 
 func TestLabelToReview(t *testing.T) {
-	const label = "review/ready-for-human"
+	const label = "review/human"
 
 	p := pr(1, "alice", 50)
 	p.Reviews = []model.Review{
@@ -152,7 +152,7 @@ func TestLabelToReview(t *testing.T) {
 	}
 	p.Timeline = []model.TimelineEvent{
 		{Event: "labeled", CreatedAt: at(1), Label: &model.Label{Name: "kind/bug"}},
-		{Event: "labeled", CreatedAt: at(4), Label: &model.Label{Name: "Review/Ready-For-Human"}},
+		{Event: "labeled", CreatedAt: at(4), Label: &model.Label{Name: "Review/Human"}},
 		{Event: "unlabeled", CreatedAt: at(5), Label: &model.Label{Name: label}},
 		{Event: "labeled", CreatedAt: at(6), Label: &model.Label{Name: label}},
 	}
@@ -190,7 +190,7 @@ func TestComputeEndToEnd(t *testing.T) {
 	c.Runs = []model.WorkflowRun{{Name: "Tests", RunAttempt: 2}, {Name: "Lint", RunAttempt: 1}}
 
 	rep := Compute([]model.PRData{a, b, c}, []string{"o/r"}, t0, Options{
-		Group: []string{"Alice"}, AreaDepth: 2, ReadyLabel: "review/ready-for-human", Top: 5, CI: true,
+		Group: []string{"Alice"}, AreaDepth: 2, ReadyLabel: "review/human", Top: 5, CI: true,
 	})
 
 	require.Equal(t, 3, rep.MergedPRs)

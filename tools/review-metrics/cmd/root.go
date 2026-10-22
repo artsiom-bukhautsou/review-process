@@ -63,7 +63,7 @@ GH_HOST). Only the REST API is used.`,
 	fl.IntVar(&f.limit, "limit", 500, "maximum merged PRs per repository")
 	fl.StringSliceVar(&f.group, "group", nil, "comma-separated logins to compare against everyone else")
 	fl.IntVar(&f.areaDepth, "area-depth", 2, "directory depth that defines an area for knowledge spread")
-	fl.StringVar(&f.readyLabel, "ready-label", "review/ready-for-human", "label that marks a PR ready for human review")
+	fl.StringVar(&f.readyLabel, "ready-label", "review/human", "label that marks a PR ready for human review")
 	fl.BoolVar(&f.ci, "ci", false, "also fetch GitHub Actions runs to compute the re-run rate")
 	fl.StringVar(&f.format, "format", app.FormatText, "output format: text, json or markdown")
 	fl.StringVar(&f.cacheDir, "cache-dir", "", "response cache directory (default $XDG_CACHE_HOME/review-metrics)")

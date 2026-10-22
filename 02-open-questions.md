@@ -1,7 +1,7 @@
 # Open Questions & Investigation TODO
 
 **Scope:** generic questions. Team-specific answers and questions live in `teams/<team>.md`. \
-**How to use:** each item has an ID referenced from [`01-steps.md`](01-steps.md). Fill in **Answer / Decision** as we go; move resolved items to the bottom with a date. Status: `open` · `investigating` · `needs-discussion` · `decided`.
+**How to use:** each item has an ID referenced from [`01-steps.md`](01-steps.md). Maintenance-agent questions (A-series) live in [`04-maintenance-agents.md`](04-maintenance-agents.md). Fill in **Answer / Decision** as we go; move resolved items to the bottom with a date. Status: `open` · `investigating` · `needs-discussion` · `decided`.
 
 ---
 

@@ -32,7 +32,7 @@ A healthy Cassandra cluster gets disrupted. This includes an unexpected rolling 
 Flag these as Important unless the item says otherwise. Items marked *(CI)* are mechanical. They stay here only until the matching CI check exists, then the line is deleted ([plan §3.1](../../00-plan.md#31-deterministic-checks-are-code-not-review)).
 
 - **No changelog entry** *(CI, once the changelog check exists; there is none yet)*. Until changelog fragments (1.6b) land, the entry goes under `## unreleased` in `CHANGELOG.md`. Every change outside docs needs one, including a PR titled as a test fix that changes production code. Don't flag the category: which category fits is a judgement call.
-- Image or version references hardcoded in Go instead of `config/imageconfig`.
+- Image or version references hardcoded in Go instead of `config/imageconfig/image_config.yaml`.
 - Unrelated changes: reformatting, untouched files in the diff, test data edited without the test needing it.
 - **User-facing change without docs**: a change users can see (fields, annotations, behaviour, metrics) with no docs note or docs link, even when the changelog kind isn't `FEATURE` ([plan §5.6](../../00-plan.md#56-user-facing-documentation-docs-sync)).
 - **Test sprawl** ([shared §6, items 7–8](../../shared/go-operator-guidelines.md#6-tests)): standalone regression tests, new tests for a change that doesn't alter behaviour, or new tests that only repeat assertions an existing test already makes. Report it once per PR and list every such test. For each one, say which existing test the case belongs in, or that it can be deleted.

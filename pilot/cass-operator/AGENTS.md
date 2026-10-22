@@ -12,11 +12,11 @@ A Kubernetes operator that deploys and operates Apache Cassandra, DSE and HCD cl
 |---|---|
 | `apis/` | CRD types and API groups (`cassandra`, `control`, `config`). `zz_generated.deepcopy.go` is generated |
 | `internal/controllers/cassandra`, `internal/controllers/control` | Controllers for CassandraDatacenter and CassandraTask |
-| `internal/webhooks/` | Validating webhook for CassandraDatacenter, which blocks invalid changes and transitions |
+| `internal/webhooks/cassandra/v1beta1/` | Validating webhook for CassandraDatacenter, which blocks invalid changes and transitions |
 | `internal/result/` | Reconcile result helpers: `Continue()`, `Done()`, `RequeueSoon()`, `Error()` |
 | `pkg/reconciliation/` | Core reconcile logic. The entry point is `CalculateReconciliationActions` (`handler.go`); the rack and StatefulSet lifecycle is in `ReconcileAllRacks` (`reconcile_racks.go`) |
 | `pkg/httphelper/` | Management API client. `server_test_utils.go` holds the fake server used in tests |
-| `pkg/images/`, `config/imageconfig/` | Image configuration. Image versions go in config, never in Go code |
+| `config/imageconfig/image_config.yaml`, `apis/config/`, `pkg/images/` | Image configuration: versions live in `image_config.yaml` (YAML only; the Makefile edits it with `yq`), its types in `apis/config/v1beta1` and `v1beta2`, loading in `pkg/images`. Image versions go in config, never in Go code |
 | `tests/` | End-to-end Ginkgo/Gomega suites, one directory per scenario, run against a kind cluster. `tests/testdata/` holds fixtures |
 | `hack/cluster.sh` | Creates the kind cluster for end-to-end tests (`ipv4`, `ipv6` or `dual`) |
 | `config/` | Kustomize manifests. `config/crd/bases` is generated |

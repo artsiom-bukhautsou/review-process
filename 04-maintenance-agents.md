@@ -256,9 +256,9 @@ Ideas that come from the automation and development side rather than from review
 | 1 🟢 | Flaky-test fixer: report-only for two runs, then fix PRs | 0, T21 |
 | 2 🟢 | Agent-context tuner: deterministic `AGENTS.md` checks first, then the monthly PR | Finding outcomes recorded (Phase 5, Loop A) |
 | 3 🟡 | CI time and cost tracker in `review-metrics`, weekly report | 0 (baseline) |
-| 4 🟡 | Docs-sync | PR-level docs check (3.11), D10 |
+| 4 🟡 | Docs-sync | PR-level docs check ([`01-steps.md` 3.11](01-steps.md#phase-3--repository-readiness-and-verification-before-the-pr)), D10 |
 | 5 🟡 | Dead-code remover, `internal/` only | — |
-| 6 🟡 | Stale-experiment report | Coverage map (3.9), A6 |
+| 6 🟡 | Stale-experiment report | Coverage map ([`01-steps.md` 3.9](01-steps.md#phase-3--repository-readiness-and-verification-before-the-pr)), A6 |
 | 7 🟡 | Others from [§3](#3-other-candidates), when a metric points at them | — |
 
 ---

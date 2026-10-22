@@ -73,7 +73,7 @@ flowchart TD
 **Goal:** basics later layers depend on, plus immediate relief for review wait. Mostly configuration, plus a few small workflows.
 
 Foundations:
-- [ ] 1.1 🟢 PR template in the pilot repo (**Intent / Follow-up to / Manual testing / Risk / How to revert**). It only asks what CI can't show ([`03-templates.md` §1](03-templates.md#1-pull-request-template))
+- [ ] 1.1 🟢 PR template in the pilot repo (**Intent / Follow-up to / Manual testing / Risk / Intentional trade-offs / How to revert**). It only asks what CI can't show ([`03-templates.md` §1](03-templates.md#1-pull-request-template))
 - [ ] 1.2 🟢 Required status checks on the pilot repo's main branch (lint, types, tests, build)
 - [ ] 1.3 🟢 Branch rules: no direct pushes, required checks, 1 approval, **require conversation resolution**, **dismiss stale approvals on new commits**. **Don't** require the branch to be up to date before merging ([`00-plan.md` §4.3](00-plan.md#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates)). If a rule can't be enforced by the platform, enforce it with a workflow check instead 🔎 [T2, T19]
 - [ ] 1.4 🟢 `CODEOWNERS` on pilot repo: sensitive paths and `.github/workflows/**` → their owners; everything else → whole team 🔎 [R1]
@@ -104,9 +104,9 @@ Review-wait quick wins:
 
 - [ ] 2.1 🟢 Use `AGENTS.md` (vendor-neutral; decided). Add a one-line pointer file only for tools that require their own name
 - [ ] 2.2 🟢 Pilot repo `AGENTS.md` — **drafted by someone who is not the main owner, reviewed by the owner**. Writing it is itself a learning exercise
-- [ ] 2.3 🟢 Pilot repo `REVIEW.md` — owner corrects a draft extracted from their past review comments ([`00-plan.md` §5.5](00-plan.md#55-getting-knowledge-out-of-peoples-heads)); secondary owner reviews it
-- [ ] 2.4 🟢 Mine past human review comments; move recurring mechanical ones into lint rules or CI checks, judgement ones into `REVIEW.md`
-- [ ] 2.4b 🟡 If several repos share a stack: extract common rules into `shared/<family>-guidelines.md` and vendor a copy into each repo with the sync tool (no cross-org references) 🔎 [D8]
+- [ ] 2.3 🟢 Pilot repo `REVIEW.md` — owner corrects a draft extracted from their past review comments ([`00-plan.md` §5.5](00-plan.md#55-getting-knowledge-out-of-peoples-heads)); secondary owner reviews it 🔎 [R6]
+- [ ] 2.4 🟢 Mine past human review comments; move recurring mechanical ones into lint rules or CI checks, judgement ones into `REVIEW.md` 🔎 [D9]
+- [ ] 2.4b 🟡 If several repos share a stack: extract common rules into `shared/<family>-guidelines.md` and vendor a copy into each repo with the sync tool (no cross-org references) 🔎 [D7, D8]
 - [ ] 2.5 🟡 Add the doc maintenance rules ([`00-plan.md` §5.3](00-plan.md#53-how-these-docs-improve-over-time)) to each repo's contributing guide (vendored with the other shared files)
 - [ ] 2.6 🟡 Agree length limits and a quarterly prune slot 🔎 [D2, D3]
 - [ ] 2.7 🟢 **User documentation rules** in `AGENTS.md`: what counts as user-facing, where docs go, the format (full page or docs note) and who picks them up ([`00-plan.md` §5.6](00-plan.md#56-user-facing-documentation-docs-sync)) 🔎 [D10]
@@ -152,7 +152,7 @@ Repository readiness (one-off, hand-made; scheduled automation only keeps it fro
 
 - [ ] 4.1 🟢 Assign an **area pair** (primary + secondary owner) for each repo/area; encode in CODEOWNERS 🔎 [K4]
 - [ ] 4.2 🟢 Route Low/Medium PRs from the experts to less familiar reviewers; every such review leaves a summary or a question
-- [ ] 4.3 🟢 "Explain it back before your first change" norm for anyone entering an unfamiliar area (an AI explainer can help, but the explaining back is done by the person); whatever the developer docs were missing gets written into `docs/developer/` by hand 🔎 [K1]
+- [ ] 4.3 🟢 "Explain it back before your first change" norm for anyone entering an unfamiliar area (an AI explainer can help, but the explaining back is done by the person); whatever the developer docs were missing gets written into `docs/developer/` by hand 🔎 [K1, D6]
 - [ ] 4.4 🟡 Pair on High-risk changes
 - [ ] 4.5 🟡 Define the **graduated ownership** criteria (non-owner → trusted for an area) 🔎 [R3]
 - [ ] 4.6 🟡 Fortnightly 20-minute walkthrough in an existing meeting (rotating presenter, everyone takes a turn) 🔎 [K2]
@@ -179,7 +179,7 @@ Repository readiness (one-off, hand-made; scheduled automation only keeps it fro
 - [ ] 5.8 🟢 **Review-state workflow and labels** (`review/bots` → `review/author` → `review/human`, plus the `review/bots-done` commit status). Human reviewers are requested only at `review/human` ([`00-plan.md` §4.2](00-plan.md#42-knowing-when-bots-are-done-review-state-labels)) 🔎 [T14, T22]
 - [ ] 5.8b 🟢 **Detector** for `needs-human`: changed or removed test assertions, new `//nolint`, sensitive paths 🔎 [T17]
 - [ ] 5.9 🟢 Two weeks non-blocking, then blocking
-- [ ] 5.10 🟢 Weekly `REVIEW.md` tuning during pilot
+- [ ] 5.10 🟢 Weekly `REVIEW.md` tuning during pilot 🔎 [D5]
 
 **Exit criteria (~4–6 weeks):**
 - `fixed` share above agreed threshold; mean rounds-to-pass below threshold 🔎 [M4]
@@ -210,13 +210,13 @@ Repository readiness (one-off, hand-made; scheduled automation only keeps it fro
 
 **Goal:** human approvals scale with risk. **Start strict, loosen with evidence.**
 
-- [ ] 7.1 🟡 Write tiers for the pilot repo (template in [`03-templates.md`](03-templates.md)) 🔎 [R1]
+- [ ] 7.1 🟡 Write tiers for the pilot repo (template in [`03-templates.md`](03-templates.md)) 🔎 [R1, R8]
 - [ ] 7.2 🟢 Always-human paths via CODEOWNERS (sensitive + workflows)
 - [ ] 7.3 🟡 Trusted list **per area**, using graduated ownership from 4.5 🔎 [R3]
 - [ ] 7.4 ⚪ Tier assignment: start with **path rules + labels** in an Action; classifier later if needed 🔎 [R2]
 - [ ] 7.5 🟡 Bot approval never counts as human. Enforce it in the review-state workflow if branch rules can't express it 🔎 [T2]
 - [ ] 7.6 🟢 Agent-written PRs: directing person is accountable and counts as a reviewer
-- [ ] 7.7 🟡 Low starts at 1 human; move to 0 only with ≥1 month of supporting data 🔎 [R4]
+- [ ] 7.7 🟡 Low starts at 1 human; move to 0 only with ≥1 month of supporting data 🔎 [R4, R7]
 - [ ] 7.8 ⚪ Circuit breaker defined 🔎 [R5]
 - [ ] 7.9 🟡 **Dependency/CVE update PRs** by a bot or agent following the rules in [`00-plan.md` §4.4](00-plan.md#44-dependency-and-cve-updates): latest patch, re-scan, batch, dependencies only. Low ones need one human for the first month, then auto-merge if follow-up fixes stay at zero 🔎 [T23]
 

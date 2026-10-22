@@ -31,7 +31,7 @@ review-metrics org/op-a --ci --since 2026-07-01 --format json | jq '.reports[0].
 | `--limit` | 500 | Max merged PRs per repository |
 | `--group` | | Logins to compare against everyone else (e.g. current experts) |
 | `--area-depth` | 2 | Directory depth that defines an area |
-| `--ready-label` | `review/ready-for-human` | Label that marks a PR ready for human review |
+| `--ready-label` | `review/human` | Label that marks a PR ready for human review |
 | `--ci` | off | Also fetch Actions runs for each PR head SHA (re-run rate) |
 | `--format` | `text` | `text` (styled tables on a terminal, plain text otherwise), `json`, `markdown` |
 | `--top` | 6 | Entries in ranked lists |

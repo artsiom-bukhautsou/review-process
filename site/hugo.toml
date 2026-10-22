@@ -22,8 +22,8 @@ extended = true
 path = "github.com/imfing/hextra"
 
 # Mount the repo's Markdown as content. READMEs become section landing pages;
-# tools/, teams/ (not ready to publish yet) and anything else not listed is
-# never published. Links to them go to GitHub instead.
+# tools/, teams/ and 04-maintenance-agents.md (not ready to publish yet) and
+# anything else not listed is never published. Links to them go to GitHub instead.
 [[module.mounts]]
 source = "../README.md"
 target = "content/_index.md"
@@ -33,7 +33,7 @@ target = "content/pilot/cass-operator/_index.md"
 [[module.mounts]]
 source = ".."
 target = "content"
-files = ["! /README.md", "! **/README.md", "/*.md", "/shared/**.md", "/pilot/**.md"]
+files = ["! /README.md", "! **/README.md", "! /04-maintenance-agents.md", "/*.md", "/shared/**.md", "/pilot/**.md"]
 [[module.mounts]]
 source = "layouts"
 target = "layouts"
