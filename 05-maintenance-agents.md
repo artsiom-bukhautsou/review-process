@@ -1,7 +1,7 @@
 # Maintenance agents
 
 **Scope:** generic and team-neutral. Not published on the site yet (excluded in [`site/hugo.toml`](site/hugo.toml)). \
-**Related:** [`00-plan.md` §3.1](00-plan.md#31-deterministic-checks-are-code-not-review) (deterministic checks are code), [§3.2](00-plan.md#32-repository-readiness) (repository readiness), [§5.6](00-plan.md#56-user-facing-documentation-docs-sync) (user docs), [§4.3](00-plan.md#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates) (flaky tests), [§4.4](00-plan.md#44-dependency-and-cve-updates) (dependency updates), [§5.3](00-plan.md#53-how-these-docs-improve-over-time) (docs improve over time), [§6](00-plan.md#6-feedback-loops) (feedback loops); open questions T10 and T21 in [`02-open-questions.md`](02-open-questions.md).
+**Related:** [`00-plan.md` §3.1](00-plan.md#31-deterministic-checks-are-code-not-review) (deterministic checks are code), [§3.2](00-plan.md#32-repository-readiness) (repository readiness), [§5.6](00-plan.md#56-user-facing-documentation-docs-sync) (user docs), [§4.3](00-plan.md#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates) (flaky tests), [§4.4](00-plan.md#44-dependency-and-cve-updates) (dependency updates), [§5.3](00-plan.md#53-how-these-docs-improve-over-time) (docs improve over time), [§6](00-plan.md#6-feedback-loops) (feedback loops); investigation [T10](03-process-tracker.md#t--tooling) and decision [T21](03-process-tracker.md#decision-log) in the process tracker. Each team chooses the flaky-issue destination in [T21-A](02-team-adoption.md#t--tooling).
 
 The rest of the plan makes reviewing a PR cheaper. This page is about the work *before* and *around* the PR. Part of every review is spent on problems that existed before the PR was opened:
 

@@ -22,7 +22,7 @@ extended = true
 path = "github.com/imfing/hextra"
 
 # Mount the repo's Markdown as content. READMEs become section landing pages;
-# tools/, teams/ and 04-maintenance-agents.md (not ready to publish yet) and
+# tools/, teams/ and 05-maintenance-agents.md (not ready to publish yet) and
 # anything else not listed is never published. Links to them go to GitHub instead.
 [[module.mounts]]
 source = "../README.md"
@@ -33,7 +33,7 @@ target = "content/pilot/cass-operator/_index.md"
 [[module.mounts]]
 source = ".."
 target = "content"
-files = ["! /README.md", "! **/README.md", "! /04-maintenance-agents.md", "/*.md", "/shared/**.md", "/pilot/**.md"]
+files = ["! /README.md", "! **/README.md", "! /05-maintenance-agents.md", "/*.md", "/shared/**.md", "/pilot/**.md"]
 [[module.mounts]]
 source = "layouts"
 target = "layouts"
@@ -95,17 +95,23 @@ params = { icon = "github" }
   [cascade.target]
   path = "/01-steps"
 [[cascade]]
-  title = "Open questions"
+  title = "Team adoption"
   weight = 30
-  editURL = "https://github.com/burmanm/review-guidelines/edit/main/02-open-questions.md"
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/02-team-adoption.md"
   [cascade.target]
-  path = "/02-open-questions"
+  path = "/02-team-adoption"
+[[cascade]]
+  title = "Process tracker"
+  weight = 35
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/03-process-tracker.md"
+  [cascade.target]
+  path = "/03-process-tracker"
 [[cascade]]
   title = "Templates"
   weight = 40
-  editURL = "https://github.com/burmanm/review-guidelines/edit/main/03-templates.md"
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/04-templates.md"
   [cascade.target]
-  path = "/03-templates"
+  path = "/04-templates"
 [[cascade]]
   title = "Shared"
   weight = 50
