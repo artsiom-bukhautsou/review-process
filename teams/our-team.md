@@ -68,10 +68,10 @@ So the plan for this team has two halves that support each other:
 
 | ID | Question | Status | Answer |
 |---|---|---|---|
-| OT1 | Which of the cass-operator reviewers and committers are part of this team, and which are outside maintainers or contributors? | open | |
-| OT2 | How do seniors feel about juniors reviewing their code, and juniors about approving senior code? | needs-discussion | |
-| OT3 | How do we split repos/areas into three senior–junior pairs? Rotate yearly? | needs-discussion | |
-| OT4 | What number of authored + reviewed PRs makes a junior "trusted" for an area? | needs-discussion | |
-| OT5 | Which other operators come right after the pilot? | open | |
+| OT1 | Which of the cass-operator reviewers and committers are part of this team, and which are outside maintainers or contributors? | open | [k8ssandra maintainers team](https://github.com/orgs/k8ssandra/teams/maintainers) |
+| OT2 | How do seniors feel about juniors reviewing their code, and juniors about approving senior code? | needs-discussion | It’s common practice: juniors learn, offer fresh perspectives, and provide a sanity check. |
+| OT3 | How do we split repos/areas into three senior–junior pairs? Rotate yearly? | needs-discussion | Assign senior and junior reviewers per PR to spread knowledge and responsibility, using [GitHub auto-assignment](https://docs.github.com/en/organizations/organizing-members-into-teams/managing-code-review-settings-for-your-team), with direct requests when needed. |
+| OT4 | What number of authored + reviewed PRs makes a junior "trusted" for an area? | needs-discussion | 20 substantive PRs authored and merged, plus as many reviewed. |
+| OT5 | Which other operators come right after the pilot? | open | K8ssandra operator: its similarity to cass-operator makes it a quick way to test the review plan’s portability. |
 | OT6 | First-response target, and each person's review slot in their own timezone? | needs-discussion | |
 | OT7 | Do we run the "reviews before your own PRs" gate for the first 1–2 months? | needs-discussion | Leaning yes, as a bootstrapping measure |
