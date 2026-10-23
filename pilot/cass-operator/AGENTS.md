@@ -6,22 +6,6 @@
 
 A Kubernetes operator that deploys and operates Apache Cassandra, DSE and HCD clusters. Its main resources are `CassandraDatacenter` (`cassandra.datastax.com/v1beta1`) and `CassandraTask` (`control.k8ssandra.io/v1alpha1`). It talks to each node through the Management API sidecar. It runs standalone and as part of k8ssandra-operator, so changes must work for both. k8ssandra-operator and k8ssandra-client (the `kubectl k8ssandra` plugin) also import `pkg/httphelper` as a library.
 
-## Layout
-
-| Path | What lives there |
-|---|---|
-| `apis/` | CRD types and API groups (`cassandra`, `control`, `config`). `zz_generated.deepcopy.go` is generated |
-| `internal/controllers/cassandra`, `internal/controllers/control` | Controllers for CassandraDatacenter and CassandraTask |
-| `internal/webhooks/cassandra/v1beta1/` | Validating webhook for CassandraDatacenter, which blocks invalid changes and transitions |
-| `internal/result/` | Reconcile result helpers: `Continue()`, `Done()`, `RequeueSoon()`, `Error()` |
-| `pkg/reconciliation/` | Core reconcile logic. The entry point is `CalculateReconciliationActions` (`handler.go`); the rack and StatefulSet lifecycle is in `ReconcileAllRacks` (`reconcile_racks.go`) |
-| `pkg/httphelper/` | Management API client. `server_test_utils.go` holds the fake server used in tests |
-| `config/imageconfig/image_config.yaml`, `apis/config/`, `pkg/images/` | Image configuration: versions live in `image_config.yaml` (YAML only; the Makefile edits it with `yq`), its types in `apis/config/v1beta1` and `v1beta2`, loading in `pkg/images`. Image versions go in config, never in Go code |
-| `tests/` | End-to-end Ginkgo/Gomega suites, one directory per scenario, run against a kind cluster. `tests/testdata/` holds fixtures |
-| `hack/cluster.sh` | Creates the kind cluster for end-to-end tests (`ipv4`, `ipv6` or `dual`) |
-| `config/` | Kustomize manifests. `config/crd/bases` is generated |
-| `docs/developer/` | Developer docs: release process, workflow details (`kind.md` is outdated; use `hack/cluster.sh`) |
-
 ## How to verify changes
 
 | What | Command | Notes |
