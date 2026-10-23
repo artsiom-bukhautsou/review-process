@@ -27,7 +27,7 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | T9 | UI repos: how do we verify visual changes? | UI bugs slip past unit tests | Per front-end stack |
 | T11 | Where do metrics live? Scheduled Action writing a markdown report to a repo is the cheapest option | Feedback loops | Decide after first script |
 | T14-A | Which review assignment policy should we use: round robin or load balance? Which team should receive requests? Coordinate with [T14](03-process-tracker.md#t--tooling). | Spreads reviews according to the team's needs | Agree with the team before enabling auto-assignment |
-| T15 | Stale-PR nudge: where to post (Slack/Teams/GitHub Discussions)? What chat tool do we use? | Visibility of waiting PRs | Discuss |
+| T15 | Stale-PR nudges: where should reminders be sent? | Visibility of waiting PRs | Slack DM to the relevant team member, or a message in the team’s Slack channel for group reminders. |
 | T19 | Does merging base into a PR (no conflicts) dismiss existing approvals with our branch rules? | Decides how costly a branch update is | Test on pilot |
 | T20 | Changelog fragments: `changie` or a small command in our Go toolkit? The fragment format must render the repo's `[KIND] [#N](link) text` lines in the required order | Ends CHANGELOG conflicts | Try `changie` on the pilot |
 | T21-A | In which repo should flaky-test issues be created? Use the detection approach recorded in [T21](03-process-tracker.md#decision-log). | Detection needs a destination | Agree during the pilot flaky-test burn-down |
@@ -45,7 +45,7 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | R5 | Circuit breaker threshold for tightening tiers? | Safety valve | Discuss |
 | R6 | Written quality requirements: what are they, and are they in a form the reviewer and humans can both apply? | Unwritten bars can't be enforced by tools or by new reviewers | Mine past comments + owner interview ([`00-plan.md` §5.5](00-plan.md#55-getting-knowledge-out-of-peoples-heads)) |
 | R7 | Do we have compliance/regulatory requirements that mandate human review? | Could rule out zero-human merges | Ask |
-| R8 | Outside contributors (OSS, other teams): which approvals do they always need? | Trust and direction | Discuss |
+| R8 | Outside contributors (OSS, other teams): which approvals do they always need? | Trust and direction | Trusted team member approval |
 
 ## D — Per-project documentation
 
