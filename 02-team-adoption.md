@@ -52,9 +52,9 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | ID | Question | Why it matters | How to find out |
 |---|---|---|---|
 | D2 | Length limits? | Short docs get followed | Agree, revisit after pilot |
-| D3 | Doc prune owner and cadence? Suggest: area buddy pair, quarterly | Docs rot without an owner | Discuss |
-| D6 | Developer docs: is `docs/developer/` the right home in every repo, and who reviews additions written after an "explain it back" session? | Learning goes into maintained docs, not an explainer library | Discuss |
-| D7 | Shared conventions for all repos: which repo is the source of truth? (Repos span several orgs, so it's copied, not referenced) | Avoid drift between copies | Discuss |
+| D3 | Doc prune owner and cadence? Suggest: area buddy pair, quarterly | Docs rot without an owner | Developers must update affected documentation whenever they add, remove, or change functionality |
+| D6 | Developer docs: is `docs/developer/` the right home in every repo, and who reviews additions written after an "explain it back" session? | Learning goes into maintained docs, not an explainer library | Use `docs/developer/` by default; allow repo-specific overrides. Add or update docs when functionality changes. Not every “explain it back” session requires a documentation update. |
+| D7 | Shared conventions for all repos: which repo is the source of truth? (Repos span several orgs, so it's copied, not referenced) | Avoid drift between copies | General rules can live in the public `review-process` repo; team rules can live in a private repo under our org. Provide a sync mechanism so consuming repos can update both to their latest versions. |
 | D9 | Which rules are mechanical (→ linter) vs judgement (→ `REVIEW.md`)? Re-check after each harvest | Prefer mechanical enforcement | Per harvest |
 | D10 | User docs, per repo: what counts as user-facing, where docs go (in-repo `docs/`, a separate docs repo, the docs team's tracker), which format (full page or docs note), and who in the docs team picks them up? Does the docs note travel in the changelog fragment? | Every user-facing feature reaches the docs team | Ask the docs team; decide for the pilot |
 
@@ -73,13 +73,13 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | ID | Question | Why it matters | How to find out |
 |---|---|---|---|
 | P1 | Which repo is the pilot? Suggest: active, decent tests, review load concentrated on few people, not the most critical | Everything starts there | Phase 0.6 |
-| P2 | Process owner and co-owner from a different part of the team? | Needs drivers; co-ownership is itself anti-silo | Discuss |
+| P2 | Process owner and co-owner from a different part of the team? | Needs drivers; co-ownership is itself anti-silo | Everyone should understand and maintain this process. Repo changes require one non-author approval, like any other repo. |
 | P3 | Soft PR size limit — what number? | Small PRs are faster and easier to hand to less familiar reviewers | Look at current size distribution |
 | P4 | Can each product be used internally / in staging before release? | Early detection | Per repo |
 | P5 | How do experts feel about less familiar people reviewing their code, and vice versa? | Adoption risk; psychological safety | Team conversation |
-| P6 | Who watches after merge? Is there an on-call/on-duty concept today? | Detection layer | Discuss |
-| P7 | Where do "should we build this?" discussions happen — draft PR, issue, chat thread? | Early direction changes | Discuss |
-| P8 | First-response target, and does everyone have a daily review slot that fits their own timezone? | Pain #1 | Discuss |
+| P6 | Who watches after merge? Is there an on-call/on-duty concept today? | Detection layer | Author |
+| P7 | Where do "should we build this?" discussions happen — draft PR, issue, chat thread? | Early direction changes | Any of these |
+| P8 | First-response target, and does everyone have a daily review slot that fits their own timezone? | Pain #1 | For now, use round-robin assignment among trusted reviewers. Revisit in Phase 6 and add automated reminders based on reviewers' timezones and potentially their workload |
 
 ## K — Knowledge sharing / anti-silo
 
