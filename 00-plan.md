@@ -149,6 +149,10 @@ Examples: a changelog fragment exists; generated files are up to date; the PR li
 
 Reviewers, human or automated, are for **judgement**: is it correct, is it the right approach, do the tests prove the behaviour, is this change user-facing. When a rule in `REVIEW.md` turns out to be mechanical, it becomes a check and the line is deleted ([§5.3](#53-how-these-docs-improve-over-time)). Until the check exists, the line can stay, marked as temporary.
 
+**Evidence must be able to fail.** A check or a test that can't fail proves nothing, and an agent that iterates until everything is green will eventually land on one. This applies in two places:
+- **Checks.** Every new check comes with a test that makes it fail on purpose. Every run also prints how much it looked at ("checked 14 files", "3 fragments"), because a check can quietly start checking nothing later: a changed-file list that comes back empty, an empty file list passed to a formatter, a pipe that returns the exit code of the last command instead of the check (`set -o pipefail`). "Checked 0 files" in the log is the signal.
+- **Tests in a PR.** The tests a PR adds or extends for new behaviour or a bug fix must fail with the non-test changes undone. The author, or their agent, checks this before opening the PR. A refactor proves itself by the existing tests passing ([shared guidelines §6](shared/go-operator-guidelines.md#6-tests)), so there is nothing to undo.
+
 ### 3.2 Repository readiness
 
 The layers assume a repo that is ready for them. An automated reviewer on a repo with a lax linter, flaky CI and thin tests spends its findings on noise. Lighter human approval is only safe where the tests catch regressions. So before automated review starts on a repo ([`01-steps.md` Phase 3](01-steps.md#phase-3--repository-readiness-and-verification-before-the-pr)), the repo gets a one-off readiness push. Like the lint fixes, this is hand-made work. Scheduled automation only keeps it from slipping back.
@@ -284,6 +288,8 @@ These don't look like review problems, but each one makes PRs wait.
 - At release time a tool assembles the fragments into `CHANGELOG.md` in the repo's required order and format, and deletes them. `changie` is a Go tool built for this; a small command in our own toolkit also works.
 - CI checks that a fragment exists, unless the PR is docs-only or labelled `skip-changelog`. Dependency bots can write their own fragment.
 - `.gitattributes merge=union` is *not* a fix: GitHub's conflict detection and merge button ignore custom merge drivers.
+
+**Other conflict sources.** Today the only file that conflicts often is `CHANGELOG.md`. Conflicts in generated files are rare and small, and the author updates the branch and regenerates. If another file becomes a bottleneck, apply the same fix as for the changelog: split a shared list into one file per entry, regenerate generated files after the merge rather than resolving them by hand, and don't commit values that change on every PR, such as dates or counts.
 
 **Branch updates (merging base into the PR, or rebasing).** Track them per PR ([§2](#2-goals-and-how-well-measure-them)). Without a merge queue:
 - **Don't require "branch up to date before merging".** At low churn it forces an update for every merged PR and buys little. PR CI already tests the merge result as of the last push, and post-merge CI on the main branch catches the rare semantic conflict, which is then fixed forward.
@@ -442,7 +448,7 @@ Agent author + agent reviewer can ping-pong indefinitely. Guardrails:
 ### Loop C — Incidents, reverts and follow-up fixes become the eval set (weekly)
 - Every incident, revert or follow-up fix (`Follow-up to: #N`) traced to a merged change → expert confirms the bug and its location → added to an **eval set** of known-bad PRs.
 - Also keep a set of **known-clean PRs** to measure false alarms.
-- Any change to the reviewer's prompts, `REVIEW.md` defaults, or tooling is scored against this set before rollout. Score down → don't keep it.
+- Any change to the reviewer's prompts, `REVIEW.md` defaults, or tooling is run against this set before rollout. It must still catch every known-bad PR the previous version caught, and raise no more false alarms on the known-clean PRs. A change that catches new bugs but misses one that was caught before isn't kept.
 - Incident reviews always ask: **which layer should have caught this?**
 
 ### Loop D — Process retrospective (monthly → quarterly)
