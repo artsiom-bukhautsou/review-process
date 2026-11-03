@@ -331,7 +331,8 @@ Written by **code owners**. Good ones are short and:
 - Say what failure looks like in this repo/area (for docs: "it lies"; for config: "it misroutes").
 - Cap the number of nits.
 - List paths to skip (generated code, vendored deps, fixtures).
-- Require a file and line as evidence, not a guess from a name.
+- Require a file and line as evidence, not a guess from a name. Claims about library behaviour cite the library source at the pinned version, or a probe. Conclusions from subagents are verified, not passed on.
+- Treat mechanical changes (lint rewrites, refactors) as behaviour changes, and ask of a bug fix whether it fixes the class or only the reported symptom.
 - Ask for a summary that starts with a count, and says plainly when there's nothing to fix.
 
 ### 5.3 How these docs improve over time
