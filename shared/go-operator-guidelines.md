@@ -17,8 +17,9 @@
 6. **Keep errors where they belong.** Return an error at the point it happens and let the retry handle it, rather than threading it into an unrelated process such as decommission.
 7. **Respect controller lag.** The StatefulSet controller (or any other) may not have caught up yet. Don't act on objects whose status doesn't reflect the latest change. Show where in the sequence that situation is handled.
 8. **State in goroutines doesn't persist.** Anything a goroutine computes is lost unless it's written to an object, for example a status or an annotation. Don't mutate outer variables from inside one and expect it to matter.
-9. **Fatal startup errors exit.** In `main`, an error that should stop the process calls `os.Exit(1)`. It must not carry on and start reconcilers.
-10. **Expected transient conditions aren't errors.** A 409 conflict caused by a stale cache, or NotFound right after a create, resolves on its own. Requeue (for example `RequeueSoon`) without returning an error, so it doesn't produce a Warning event or an error log.
+9. **A goroutine that outlives `Reconcile` doesn't use the reconcile context.** controller-runtime cancels that context when `Reconcile` returns whenever a reconciliation timeout is set. Derive a separate context (`context.WithoutCancel` plus its own timeout), and re-read objects before writing to them. When a PR changes controller options or defaults, check these goroutines.
+10. **Fatal startup errors exit.** In `main`, an error that should stop the process calls `os.Exit(1)`. It must not carry on and start reconcilers.
+11. **Expected transient conditions aren't errors.** A 409 conflict caused by a stale cache, or NotFound right after a create, resolves on its own. Requeue (for example `RequeueSoon`) without returning an error, so it doesn't produce a Warning event or an error log.
 
 ## 2. Kubernetes semantics
 
@@ -27,6 +28,7 @@
 3. **Handle optional fields the API allows.** If Kubernetes allows ports without names, an empty template, and so on, the code must cope with them.
 4. **Check that the platform actually supports what you rely on.** Examples: a StorageClass that supports modification, the StatefulSet controller accepting an in-place change, a CSI driver approving a change. Then reconcile until the change is confirmed, not just requested.
 5. **Prefer OpenAPI validation (CRD markers) for static field rules.** Use webhooks for rules that need the old object, such as invalid transitions.
+6. **Conditions are tri-state.** A condition that was never written reads as `Unknown`, not `False`. A check against `False` must be correct when the condition is unset, so ask which code writes it `False`. Prefer helpers whose names say how they treat the unset case.
 
 ## 3. API design (CRDs)
 
@@ -68,7 +70,7 @@ Three levels. Each catches different problems; none replaces another.
 **Prefer envtest for controller behaviour.** It gives far better feedback than unit tests with mocked clients and runs much faster than end-to-end tests. A controller change with only unit tests should explain why envtest wasn't possible.
 
 All levels:
-1. **Tests must actually exercise the feature.** Check that fakes, such as a fake API server, expose the capability being tested. A test that passes because the fake lacks the feature proves nothing.
+1. **Tests must actually exercise the feature.** Check that fakes, such as a fake API server, expose the capability being tested. A test that passes because the fake lacks the feature proves nothing. Fakes must also be able to fail the way the real service does (errors and hangs per endpoint, unhealthy probes) for the failure paths a test claims to cover.
 2. **Cover three cases for new behaviour:** existing behaviour unchanged, new behaviour works, and the failure path. "Existing behaviour unchanged" is normally shown by the existing tests still passing. Add a case for it only when no existing test covers that path.
 3. **Test at the level that owns the behaviour** (table above).
 4. **Keep test setup simple.** Inline data is often clearer than overriding methods. Use existing builders and helpers.
@@ -76,6 +78,7 @@ All levels:
 6. **Check that assertions can fail.** For example, `-1 <= 1` passes when the value is an error sentinel.
 7. **No standalone regression tests.** Behaviour is tested in the normal tests of the code, controller or scenario that owns it. A bug fix extends those tests, for example with a new table case or another assertion in the existing spec, so they cover the case they missed. Don't add a separate test named after the bug, the issue or the parameter that changed. If the behaviour matters, it belongs in the normal tests. If it doesn't, it needs no test.
 8. **No new tests when behaviour doesn't change.** A refactor, a rename or an internal restructuring is proven by the existing tests passing. The same goes for the default path of a new optional field that keeps the old behaviour when unset: only the new, set path needs a test. Don't add tests that only pin a constant, a default value or a field the diff touched, or that only check a function was called.
+9. **Tests run with production settings.** The envtest manager uses the same controller options as `cmd/main.go` (reconciliation timeout, concurrency, panic recovery), and end-to-end suites deploy the operator with its default flags. Otherwise a changed default can't fail a test.
 
 Waiting and polling (envtest and end-to-end):
 1. **Poll, don't sleep.** Use `Eventually` and the existing wait helpers.

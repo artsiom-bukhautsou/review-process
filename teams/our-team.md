@@ -75,3 +75,4 @@ So the plan for this team has two halves that support each other:
 | OT5 | Which other operators come right after the pilot? | open | K8ssandra operator: its similarity to cass-operator makes it a quick way to test the review plan’s portability. |
 | OT6 | First-response target, and each person's review slot in their own timezone? | needs-discussion | |
 | OT7 | Do we run the "reviews before your own PRs" gate for the first 1–2 months? | needs-discussion | Leaning yes, as a bootstrapping measure |
+| M5 | How many past follow-up fixes or bugs are usable as eval cases? | investigating | First 4 cases from the cass-operator reconcile audit ([review-process#2](https://github.com/burmanm/review-process/issues/2)) |

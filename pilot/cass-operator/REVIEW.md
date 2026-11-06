@@ -13,10 +13,13 @@ A healthy Cassandra cluster gets disrupted. This includes an unexpected rolling 
 1. **Upgrade safety.** After an operator upgrade, existing clusters must behave as before unless the PR says otherwise.
    - Any change to the generated StatefulSet, pod template, Services or labels can restart or change every existing cluster. Flag it unless the PR says it is intended and the CHANGELOG mentions it.
    - Also look for changed behaviour on existing code paths: Management API client and transport settings, timeouts, defaults.
+   - **Option and default changes have consumers outside the diff.** When a PR changes a controller-runtime or manager option, a client or transport setting, or a default, list the code that depends on the old behaviour, even when it isn't in the diff. For the reconcile context, that means goroutines that use `rc.Ctx` ([shared §1](../../shared/go-operator-guidelines.md#1-reconcile-loop)).
    - When the impact depends on the environment and you can't show it, ask whether the change is intended instead of describing a failure.
 2. **Server and version gating.** Behaviour differs across `cassandra`, `dse` and `hcd`, and across major versions. For example, MCAC exists only on older versions. Check that version-specific code is gated correctly and that the gate is right.
-3. **Rack and StatefulSet sequencing.** Check rack balance, ordering, and acting on StatefulSets before their controller has caught up. Ask where in the sequence the edge case is handled.
+3. **Order of checks, racks and StatefulSets.** Check rack balance, ordering, and acting on StatefulSets before their controller has caught up. Ask where in the sequence the edge case is handled.
+   - `ReconcileAllRacks` runs an ordered list of checks. Look for a check that depends on state a later check loads or recovers.
 4. **Long operations as state machines.** Scale, decommission, replace and tasks must be resumable after a restart and must not finish early when a Management API call fails. Check what happens when a request fails halfway.
+   - **Every new blocking state names its exit.** For each new `result.Error`, `RequeueSoon`, `Done()` or latched condition, ask what clears it for each way it can be entered, and whether that code runs before this point in the pass. A `Done()` also names the watch event that brings the next pass: status-only changes don't trigger one, since the predicates are `GenerationChanged || AnnotationChanged`. The test that owns the behaviour covers the unhappy exit.
 5. **Transient vs terminal errors and requeues** ([shared guidelines §1](../../shared/go-operator-guidelines.md#1-reconcile-loop)). Look especially at code that polls Cassandra or the Management API.
 6. **Per-reconcile cost.** New reads of Secrets, PVCs, Endpoints or config on every reconcile are expensive in cluster-wide deployments.
 7. **Names and labels.** Kubernetes object names follow `metadata.name`, never the datacenter name override. Label value rules are not the same as annotation value rules.
@@ -26,6 +29,9 @@ A healthy Cassandra cluster gets disrupted. This includes an unexpected rolling 
    - Both projects import `pkg/httphelper` as a library, so a change to its exported behaviour is an API change.
    - k8ssandra-client passes its own transport for port-forwarded connections.
 10. **Tests prove the behaviour, at the right level.** Fake Management API features match what the test claims. Controller and webhook changes come with envtest coverage. Operational changes come with an end-to-end suite, or an explanation of why not.
+11. **Mechanical changes and partial fixes.**
+    - Lint rewrites, deprecation replacements and refactors are behaviour changes. The author states that each rewrite is equivalent, and the reviewer checks rewritten conditionals one by one. Conditions are tri-state ([shared §2](../../shared/go-operator-guidelines.md#2-kubernetes-semantics)).
+    - For a bug fix, ask what else on the same path has the same property.
 
 ## Repo hygiene
 
@@ -67,7 +73,10 @@ If the PR description states a trade-off or a known limitation, don't flag it. R
 
 ## Evidence
 
-Every finding cites a file and line and describes the concrete failure: what breaks, for which cluster or version, and when. Don't guess from a name. Read the code it calls.
+- Every finding cites a file and line and describes the concrete failure: what breaks, for which cluster or version, and when. Say how often the trigger has to happen, and set the severity from that. Don't guess from a name. Read the code it calls.
+- Don't report a mechanism without tracing every function it names. Say what was traced and what was assumed.
+- A finding, or the dismissal of one, that depends on how a library behaves (controller-runtime, client-go, `net/http`) cites the library source at the version in `go.mod` (`$(go env GOMODCACHE)/<module>@<version>/<path>:<line>`), or a small probe. "Probably" is not evidence.
+- Conclusions from subagents are claims to verify, not findings.
 
 ## Limits
 

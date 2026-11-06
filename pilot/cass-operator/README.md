@@ -74,11 +74,11 @@ People who authored or reviewed in each area, over the same period:
 | 2.4, 3.6 | Enable `revive`, `govet` and the additions, fixing the code in the same PRs ([`lint-proposal.md`](lint-proposal.md)) |
 | 2.7 | User docs: confirm where cass-operator's user docs live and who picks up docs notes (D10) |
 | 3.7 | Flaky-test burn-down: start with the Kind integration tests, which caused 4 of 5 re-runs |
-| 3.9 | Coverage map first for `internal/webhooks` (a critical area with the thinnest knowledge spread) and the scale and decommission paths in `pkg/reconciliation` |
+| 3.9 | Coverage map first for `internal/webhooks` (a critical area with the thinnest knowledge spread) and the scale and decommission paths in `pkg/reconciliation`. Also make the envtest manager use the controller options from `cmd/main.go`, and let the fake Management API fail per endpoint ([shared §6](../../shared/go-operator-guidelines.md#6-tests)) |
 | 3.10 | Move the *(CI)* items in [`REVIEW.md`](REVIEW.md) "Repo hygiene" and "Needs a human" into CI: changelog fragment, `//nolint` and changed-assertion detection. The linked-issue check and the generated-files check (`make manifests generate` must leave no diff) already exist |
 | 4.x | Pick `internal/webhooks` and one part of `pkg/reconciliation` (e.g. decommission) as the first areas where a second person **authors** changes, with the "explain it back" norm; gaps found go into `docs/developer/` (starting with replacing the outdated `kind.md` with `hack/cluster.sh` usage) |
 | 5.1b | Decide fork-PR handling (T16) before the reviewer workflow goes live, since outside contributors open PRs here |
-| 6.2 | Eval set: use past `[BUGFIX]` entries in the CHANGELOG that link to the PR that introduced the bug, plus bugs found in review (the harvested comments show where), confirmed by the main maintainer |
+| 6.2 | Eval set: use past `[BUGFIX]` entries in the CHANGELOG that link to the PR that introduced the bug, plus bugs found in review (the harvested comments show where), confirmed by the main maintainer. Audits of existing code are a third source |
 
 ## How the harvest was done (repeatable for other repos)
 

@@ -104,6 +104,8 @@ Owners: <team or people>
 
 ## Focus on
 - <the 3–6 things that actually cause bugs in this code>
+- **Mechanical changes are behaviour changes.** Lint rewrites, deprecation replacements and refactors need the author to state that the change is equivalent. Check each rewritten conditional on its own.
+- **Fix the class, not the symptom.** For a bug fix, ask what else on the same code path has the same property.
 
 ## Don't flag
 - Style issues the linter already enforces
@@ -122,7 +124,10 @@ Report a finding only when the description doesn't explain the change.
 - `**/fixtures/**`
 
 ## Evidence
-Every finding must cite a file and line, and explain the concrete failure. No guesses based on names alone.
+- Every finding must cite a file and line, and explain the concrete failure: what breaks, when, and how often the trigger has to happen. No guesses based on names alone.
+- Trace every function a mechanism names before reporting it. Say what was traced and what was assumed.
+- A finding, or the dismissal of one, that depends on library behaviour cites the library source at the version the repo pins (Go: `$(go env GOMODCACHE)/<module>@<version>/<path>:<line>`), or a small probe.
+- Conclusions from subagents are claims to verify, not findings.
 
 ## Limits
 - At most <3> nits per review.

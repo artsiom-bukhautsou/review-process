@@ -31,7 +31,7 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | T19 | Does merging base into a PR (no conflicts) dismiss existing approvals with our branch rules? | Decides how costly a branch update is | Test on pilot |
 | T20 | Changelog fragments: `changie` or a small command in our Go toolkit? The fragment format must render the repo's `[KIND] [#N](link) text` lines in the required order | Ends CHANGELOG conflicts | Try `changie` on the pilot |
 | T21-A | In which repo should flaky-test issues be created? Use the detection approach recorded in [T21](03-process-tracker.md#decision-log). | Detection needs a destination | Agree during the pilot flaky-test burn-down |
-| T16 | Public repos: how does the automated reviewer handle fork PRs without exposing secrets — label-gated `pull_request_target` reading the diff only, a `workflow_run` follow-up, or maintainer-triggered? | Security of the review pipeline | Prototype on a public pilot |
+| T16 | Public repos: how does the automated reviewer handle fork PRs without exposing secrets — label-gated `pull_request_target` reading the diff only, a `workflow_run` follow-up, or maintainer-triggered? Probes can't run in such a job, since they execute code next to the PR's; citing library source from the module cache still works | Security of the review pipeline | Prototype on a public pilot |
 | T24-A | What are our CI time targets and action thresholds? Does any repo need more or larger runners? Use the measurements from [T24](03-process-tracker.md#t--tooling). | Turns CI measurements into local capacity and performance decisions | Set targets from the pilot baseline |
 
 ## R — Risk tiers and approval policy
