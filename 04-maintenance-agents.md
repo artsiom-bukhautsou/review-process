@@ -1,7 +1,7 @@
 # Maintenance agents
 
 **Scope:** generic and team-neutral. Not published on the site yet (excluded in [`site/hugo.toml`](site/hugo.toml)). \
-**Related:** [`00-plan.md` §3.1](00-plan.md#31-deterministic-checks-are-code-not-review) (deterministic checks are code), [§3.2](00-plan.md#32-repository-readiness) (repository readiness), [§5.6](00-plan.md#56-user-facing-documentation-docs-sync) (user docs), [§4.3](00-plan.md#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates) (flaky tests), [§4.4](00-plan.md#44-dependency-and-cve-updates) (dependency updates), [§5.3](00-plan.md#53-how-these-docs-improve-over-time) (docs improve over time), [§6](00-plan.md#6-feedback-loops) (feedback loops); open questions T10 and T21 in [`02-open-questions.md`](02-open-questions.md).
+**Related:** [`00-plan.md` §3.1](00-plan.md#31-deterministic-checks-are-code-not-review) (deterministic checks are code), [§3.2](00-plan.md#32-repository-readiness) (repository readiness), [§5.6](00-plan.md#56-user-facing-documentation-docs-sync) (user docs), [§4.3](00-plan.md#43-ci-friction-flaky-tests-and-branch-updates) (flaky tests), [§4.4](00-plan.md#44-dependency-and-cve-updates) (dependency updates), [§5.3](00-plan.md#53-how-these-docs-improve-over-time) (docs improve over time), [§6](00-plan.md#6-feedback-loops) (feedback loops); open questions T10 and T21 in [`02-open-questions.md`](02-open-questions.md).
 
 The rest of the plan makes reviewing a PR cheaper. This page is about the work *before* and *around* the PR. Part of every review is spent on problems that existed before the PR was opened:
 
@@ -95,7 +95,7 @@ jobs:
 
 ### 2.1 Flaky-test fixer 🟢
 
-This is the first agent to build. Every flaky failure costs a re-run, another wait and a bit more trust in red CI. [§4.3](00-plan.md#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates) already defines how flaky tests are detected and quarantined. The one-off burn-down of today's flaky tests is readiness work ([`01-steps.md` 3.7](01-steps.md#phase-3--repository-readiness-and-verification-before-the-pr)). This agent keeps the re-run rate down after that.
+This is the first agent to build. Every flaky failure costs a re-run, another wait and a bit more trust in red CI. [§4.3](00-plan.md#43-ci-friction-flaky-tests-and-branch-updates) already defines how flaky tests are detected and quarantined. The one-off burn-down of today's flaky tests is readiness work ([`01-steps.md` 3.7](01-steps.md#phase-3--repository-readiness-and-verification-before-the-pr)). This agent keeps the re-run rate down after that.
 
 **Weekly run:**
 
@@ -267,7 +267,7 @@ Ideas that come from the automation and development side rather than from review
 
 | ID | Question | Why it matters | Status | Answer / Decision |
 |---|---|---|---|---|
-| A1 | Where does the scheduled agent's model run, and how is cost capped per run (token or time budget)? Vendor choice is out of scope ([§9](00-plan.md#9-explicitly-out-of-scope-this-round)), a budget isn't | Weekly jobs across many repos add up | open | |
+| A1 | Where does the scheduled agent's model run, and how is cost capped per run (token or time budget)? Vendor choice is out of scope ([plan scope note](00-plan.md)), a budget isn't | Weekly jobs across many repos add up | open | |
 | A2 | One GitHub App per org for all agents, or one per agent? Should it be the same identity as the automated reviewer? | Permissions, and telling agent PRs apart in metrics | open | |
 | A3 | Test reports: JUnit or `go test -json`? Is artifact retention long enough for trends, or does a weekly collector copy them into the metrics store? | 2.1 and 2.3 both depend on per-test history | decided | No test-report artifacts. 2.1 and 2.3 read per-test failures and durations from the job logs (kept 90 days by default) |
 | A4 | Flaky end-to-end tests that can't be reproduced locally: how many quiet weeks close the issue? | Avoids closing on luck | open | |
