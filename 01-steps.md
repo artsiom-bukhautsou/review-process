@@ -10,7 +10,7 @@
 - 🟡 **Later.** Add once the core runs smoothly, usually after month 2–3, or when a metric shows you need it.
 - ⚪ **At scale.** Only for high PR volume, many repos or several teams. Skip until there's evidence you need it.
 
-A small team can run the 🟢 steps alone and stop there. See [`00-plan.md` §0.1](00-plan.md#01-start-small-what-to-do-first) for the reasoning.
+A small team can run the 🟢 steps alone and stop there.
 
 Phases are ordered by dependency, but some run in parallel. We start on **one pilot repo**, then widen. **Phase 1 includes quick wins** for review wait that need no new tooling.
 
@@ -26,7 +26,7 @@ flowchart TD
     P5["Phase 5 · Automated review on PRs (pilot repo)"]
     P6["Phase 6 · Feedback loops #amp; eval set"]
     P7["Phase 7 · Risk-tiered approval"]
-    P8["Phase 8 · Merge queue, flags, rollback"]
+    P8["Phase 8 · Flags, rollback"]
     P9["Phase 9 · Widen to all repos (ongoing)"]
     P0 --> P1
     P1 --> P2 & P3 & P4
@@ -75,13 +75,13 @@ flowchart TD
 Foundations:
 - [ ] 1.1 🟢 PR template in the pilot repo (**Intent / Follow-up to / Manual testing / Risk / Intentional trade-offs / How to revert**). It only asks what CI can't show ([`04-templates.md` §1](04-templates.md#1-pull-request-template))
 - [ ] 1.2 🟢 Required status checks on the pilot repo's main branch (lint, types, tests, build)
-- [ ] 1.3 🟢 Branch rules: no direct pushes, required checks, 1 approval, **require conversation resolution**, **dismiss stale approvals on new commits**. **Don't** require the branch to be up to date before merging ([`00-plan.md` §4.3](00-plan.md#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates)). If a rule can't be enforced by the platform, enforce it with a workflow check instead 🔎 [T2](02-team-adoption.md#t--tooling), [T19](02-team-adoption.md#t--tooling)
+- [ ] 1.3 🟢 Branch rules: no direct pushes, required checks, 1 approval, **require conversation resolution**, **dismiss stale approvals on new commits**. **Don't** require the branch to be up to date before merging ([`00-plan.md` §4.3](00-plan.md#43-ci-friction-flaky-tests-and-branch-updates)). If a rule can't be enforced by the platform, enforce it with a workflow check instead 🔎 [T2](02-team-adoption.md#t--tooling), [T19](02-team-adoption.md#t--tooling)
 - [ ] 1.4 🟢 `CODEOWNERS` on pilot repo: sensitive paths and `.github/workflows/**` → their owners; everything else → whole team 🔎 [R1](02-team-adoption.md#r--risk-tiers-and-approval-policy)
 - [ ] 1.5 🟡 Rollback runbook for the pilot repo, tested once 🔎 [T6](02-team-adoption.md#t--tooling)
 - [ ] 1.6 🟡 Start `CHANGELOG-review-process.md`
-- [ ] 1.6b 🟢 **Changelog fragments** instead of editing `CHANGELOG.md` directly: one file per PR, assembled at release, with a CI check that the fragment exists ([`00-plan.md` §4.3](00-plan.md#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates)) 🔎 [T20](02-team-adoption.md#t--tooling)
+- [ ] 1.6b 🟢 **Changelog:** end `CHANGELOG.md` conflicts with the new changelog process 🔎 [T20](03-process-tracker.md#t--tooling)
 - [ ] 1.6c 🟢 **Flaky-test policy:** re-run detection opens a `flaky-test` issue, flaky tests are fixed with priority or quarantined (with human approval), and open flaky issues are reviewed in the monthly check 🔎 [T21](03-process-tracker.md#decision-log), [T21-A](02-team-adoption.md#t--tooling)
-- [ ] 1.6d 🟢 **Branch update norm:** update only on conflict or stale CI. Merge base into the branch rather than rebasing once human review has started. Agents follow the same rule ([`00-plan.md` §4.3](00-plan.md#43-ci-friction-flaky-tests-changelog-conflicts-and-branch-updates))
+- [ ] 1.6d 🟢 **Branch update norm:** update only on conflict or stale CI. Merge base into the branch rather than rebasing once human review has started. Agents follow the same rule ([`00-plan.md` §4.3](00-plan.md#43-ci-friction-flaky-tests-and-branch-updates))
 
 Review-wait quick wins:
 - [ ] 1.7 🟢 Create a GitHub team for the devs; enable **auto-assignment** (load balance) so reviews spread across everyone, not just the experts 🔎 [T14](03-process-tracker.md#t--tooling), [T14-A](02-team-adoption.md#t--tooling)
@@ -132,7 +132,7 @@ Repository readiness (one-off, hand-made; scheduled automation only keeps it fro
 - [ ] 3.7 🟢 **Flaky-test burn-down:** fix or quarantine the known flaky tests, worst first, until the CI re-run rate is below the target. Failures are counted per test from re-runs and the failed jobs' logs 🔎 [T21](03-process-tracker.md#decision-log), [M8](02-team-adoption.md#m--measurement)
 - [ ] 3.8 🟢 **CI time:** measure time to green and queue time per workflow and job, then do the cheap wins: cancel superseded runs, Go and image caches, images built once per run, one gate job for path-filtered suites 🔎 [T24](03-process-tracker.md#t--tooling), [T24-A](02-team-adoption.md#t--tooling)
 - [ ] 3.9 🟢 **Test gaps in critical areas:** a combined coverage map per area (unit, envtest, end-to-end). Owners pick the gaps that matter, and tests are added at the right level. No coverage percentage gate 🔎 [T25](03-process-tracker.md#t--tooling)
-- [ ] 3.10 🟢 **Deterministic checks:** every mechanical rule in `REVIEW.md`, the shared guidelines and the PR template becomes a CI check that also runs in the local check command: changelog fragment, generated files up to date, linked issue, the `needs-human` detector ([`00-plan.md` §3.1](00-plan.md#31-deterministic-checks-are-code-not-review)) 🔎 [T17](03-process-tracker.md#t--tooling)
+- [ ] 3.10 🟢 **Deterministic checks:** every mechanical rule in `REVIEW.md`, the shared guidelines and the PR template becomes a CI check that also runs in the local check command: generated files up to date, linked issue, the `needs-human` detector ([`00-plan.md` §3.1](00-plan.md#31-deterministic-checks-are-code-not-review)) 🔎 [T17](03-process-tracker.md#t--tooling)
 - [ ] 3.11 🟢 **Docs check:** user-facing changes carry a docs note or docs link, or `skip-docs` with a reason. New CRD fields have descriptions ([`00-plan.md` §5.6](00-plan.md#56-user-facing-documentation-docs-sync)) 🔎 [D10](02-team-adoption.md#d--per-project-documentation)
 - [ ] 3.12 🟡 **Changed-lines coverage** shown on each PR as information for the reviewer, not a gate 🔎 [T25](03-process-tracker.md#t--tooling)
 
@@ -225,11 +225,10 @@ Repository readiness (one-off, hand-made; scheduled automation only keeps it fro
 
 ---
 
-## Phase 8 — Merge queue, flags, rollback
+## Phase 8 — Flags and rollback
 
 **Goal:** mistakes are cheap to catch and undo — this is what makes lighter approval safe.
 
-- [ ] 8.1 ⚪ Merge queue, only when churn makes "passed separately, broke together" a real problem 🔎 [T5](02-team-adoption.md#t--tooling)
 - [ ] 8.2 ⚪ Feature flags for new behaviour where the product allows 🔎 [T6](02-team-adoption.md#t--tooling)
 - [ ] 8.3 ⚪ Internal use / staging before release 🔎 [P4](02-team-adoption.md#p--process-and-people)
 - [ ] 8.4 🟡 Rollback time measured and within target 🔎 [M7](02-team-adoption.md#m--measurement)

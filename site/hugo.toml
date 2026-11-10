@@ -83,6 +83,12 @@ params = { icon = "github" }
 # Sidebar labels, order and "Edit this page" targets live here, so the .md files
 # need no front matter. Each page's heading still comes from the file's own "# ..." line.
 [[cascade]]
+  title = "Structure"
+  weight = 5
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/structure.md"
+  [cascade.target]
+  path = "/structure"
+[[cascade]]
   title = "Plan"
   weight = 10
   editURL = "https://github.com/burmanm/review-guidelines/edit/main/00-plan.md"
@@ -112,6 +118,12 @@ params = { icon = "github" }
   editURL = "https://github.com/burmanm/review-guidelines/edit/main/04-templates.md"
   [cascade.target]
   path = "/04-templates"
+[[cascade]]
+  title = "Tooling"
+  weight = 45
+  editURL = "https://github.com/burmanm/review-guidelines/edit/main/tooling.md"
+  [cascade.target]
+  path = "/tooling"
 [[cascade]]
   title = "Shared"
   weight = 50

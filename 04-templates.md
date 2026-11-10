@@ -204,7 +204,6 @@ Add to the existing incident/postmortem template:
 - [ ] Automated code review
 - [ ] Automated security review
 - [ ] Human approval
-- [ ] Merge queue
 - [ ] Flags / staged release / monitoring
 
 What was missing from that layer? (context in AGENTS.md/REVIEW.md, a lint rule, a test, a check)

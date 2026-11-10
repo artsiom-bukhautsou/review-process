@@ -29,7 +29,6 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | T14-A | Which review assignment policy should we use: round robin or load balance? Which team should receive requests? Coordinate with [T14](03-process-tracker.md#t--tooling). | Spreads reviews according to the team's needs | Agree with the team before enabling auto-assignment |
 | T15 | Stale-PR nudges: where should reminders be sent? | Visibility of waiting PRs | Slack DM to the relevant team member, or a message in the team’s Slack channel for group reminders. |
 | T19 | Does merging base into a PR (no conflicts) dismiss existing approvals with our branch rules? | Decides how costly a branch update is | Test on pilot |
-| T20 | Changelog fragments: `changie` or a small command in our Go toolkit? The fragment format must render the repo's `[KIND] [#N](link) text` lines in the required order | Ends CHANGELOG conflicts | Try `changie` on the pilot |
 | T21-A | In which repo should flaky-test issues be created? Use the detection approach recorded in [T21](03-process-tracker.md#decision-log). | Detection needs a destination | Agree during the pilot flaky-test burn-down |
 | T16 | Public repos: how does the automated reviewer handle fork PRs without exposing secrets — label-gated `pull_request_target` reading the diff only, a `workflow_run` follow-up, or maintainer-triggered? Probes can't run in such a job, since they execute code next to the PR's; citing library source from the module cache still works | Security of the review pipeline | Prototype on a public pilot |
 | T24-A | What are our CI time targets and action thresholds? Does any repo need more or larger runners? Use the measurements from [T24](03-process-tracker.md#t--tooling). | Turns CI measurements into local capacity and performance decisions | Set targets from the pilot baseline |
@@ -43,7 +42,7 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | R3 | Graduated ownership: what earns someone "trusted" status for an area (e.g. N authored + N reviewed PRs, no reverts)? Who decides? | Lighter paths without anyone staying an outsider by default | Discuss in retro |
 | R4 | What evidence moves Low from 1 human to 0? | Concrete loosening bar | Decide after Phase 6 data |
 | R5 | Circuit breaker threshold for tightening tiers? | Safety valve | Discuss |
-| R6 | Written quality requirements: what are they, and are they in a form the reviewer and humans can both apply? | Unwritten bars can't be enforced by tools or by new reviewers | Mine past comments + owner interview ([`00-plan.md` §5.5](00-plan.md#55-getting-knowledge-out-of-peoples-heads)) |
+| R6 | Written quality requirements: what are they, and are they in a form the reviewer and humans can both apply? | Unwritten bars can't be enforced by tools or by new reviewers | Mine past comments ([`00-plan.md` §5.5](00-plan.md#55-getting-knowledge-out-of-peoples-heads)) |
 | R7 | Do we have compliance/regulatory requirements that mandate human review? | Could rule out zero-human merges | Ask |
 | R8 | Outside contributors (OSS, other teams): which approvals do they always need? | Trust and direction | Trusted team member approval |
 
@@ -56,7 +55,7 @@ GitHub is treated as just a tool. Where a feature is missing, the check moves in
 | D6 | Developer docs: is `docs/developer/` the right home in every repo, and who reviews additions written after an "explain it back" session? | Learning goes into maintained docs, not an explainer library | Use `docs/developer/` by default; allow repo-specific overrides. Add or update docs when functionality changes. Not every “explain it back” session requires a documentation update. |
 | D7 | Shared conventions for all repos: which repo is the source of truth? (Repos span several orgs, so it's copied, not referenced) | Avoid drift between copies | General rules can live in the public `review-process` repo; team rules can live in a private repo under our org. Provide a sync mechanism so consuming repos can update both to their latest versions. |
 | D9 | Which rules are mechanical (→ linter) vs judgement (→ `REVIEW.md`)? Re-check after each harvest | Prefer mechanical enforcement | Per harvest |
-| D10 | User docs, per repo: what counts as user-facing, where docs go (in-repo `docs/`, a separate docs repo, the docs team's tracker), which format (full page or docs note), and who in the docs team picks them up? Does the docs note travel in the changelog fragment? | Every user-facing feature reaches the docs team | Ask the docs team; decide for the pilot |
+| D10 | User docs, per repo: what counts as user-facing, where docs go (in-repo `docs/`, a separate docs repo, the docs team's tracker), which format (full page or docs note), and who in the docs team picks them up? Does the docs note travel with the changelog entry ([T20](03-process-tracker.md#t--tooling))? | Every user-facing feature reaches the docs team | Ask the docs team; decide for the pilot |
 
 ## M — Measurement
 
